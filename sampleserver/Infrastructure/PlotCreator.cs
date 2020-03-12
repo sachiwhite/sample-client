@@ -7,16 +7,14 @@ namespace sampleserver.Infrastructure
 {
     public class PlotCreator
     {
-
-        public void ReturnPlot()
+       public void ReturnPlot(DateTime start, List<double> lastMeasures, string name)
         {
-            double[] dataX = new double[] { 1, 2, 3, 4, 5 };
-            double[] dataY = new double[] { 1, 4, 9, 16, 25 };
-            
-            var plt = new ScottPlot.Plot(399, 200);
-            plt.PlotScatter(dataX, dataY);
-            plt.SaveFig("quickstart1.png");
+            var plot = new Plot(400, 200);
+            double points = 24 * 60 / 5;
+            plot.PlotSignal(lastMeasures.ToArray(), sampleRate: points, xOffset: start.ToOADate());
+            plot.Ticks(dateTimeX: true, displayTickLabelsX: true, displayTicksXminor: true);
+            plot.YLabel(name);
+            plot.SaveFig($"{name}.png");
         }
-                
     }
 }

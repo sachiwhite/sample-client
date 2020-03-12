@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using ReactiveUI;
+using sampleserver.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,9 @@ namespace sampleserver.ViewModels
         private static readonly HttpClient client = new HttpClient();
         private string greeting = "";
         private string RequestUri = "127.0.0.1:2137";
+        private TelemetryInformationContainer telemetryInformationContainer;
+        //for debugging purposes
+        int i = 0;
         public MainWindowViewModel()
         {
             
@@ -34,15 +38,19 @@ namespace sampleserver.ViewModels
                     Greeting = reader.ReadToEnd();
                 }
             });
-            
+            telemetryInformationContainer = new TelemetryInformationContainer();
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 5, 0);
+            // timer.Interval = new TimeSpan(0, 5, 0); //real value
+            timer.Interval = new TimeSpan(0, 0, 5); //value for tests
             timer.Tick += Timer_Tick;
             timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            telemetryInformationContainer.UpdateItems();
+            i++;
+            if (i == 10) timer.Stop();
             //TODO: update the model and the view every 5 minutes
         }
 
@@ -58,11 +66,11 @@ namespace sampleserver.ViewModels
             {
                 response = await client.PostAsync(new UriBuilder(RequestUri + "/telecommands").Uri, content);
             }
-            catch (ArgumentNullException ex)
-            {
-                //TODO: displaying errors
+            //catch (ArgumentNullException ex)
+            //{
+            //    //TODO: displaying errors
                 
-            }
+            //}
             catch(HttpRequestException hex)
             {
                 //TODO: displaying errors
