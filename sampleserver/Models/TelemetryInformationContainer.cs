@@ -24,7 +24,7 @@ namespace sampleserver.Models
 
         public TelemetryInformationContainer()
         {
-            DataParser = new TelemetryParser();
+            DataParser = new TelemetryParser(new DataFetcher());
             creator = new PlotCreator();
             Measures = new Dictionary<string, IDataItem>();
             //for debugging purpose, it will be deleted when timestamps can be obtained

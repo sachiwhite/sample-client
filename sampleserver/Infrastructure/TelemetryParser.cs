@@ -8,32 +8,50 @@ namespace sampleserver.Infrastructure
 {
     public class TelemetryParser :ITelemetryParser
     {
-        private DataFetcher dataFetcher;
-        public Dictionary<string, string> parsedData { get; set; }
-        public TelemetryParser()
+        private IDataFetcher dataFetcher;
+        public Dictionary<string, string> parsedData { get; private set; }
+        public TelemetryParser(IDataFetcher dataFetcher)
         {
-            dataFetcher = new DataFetcher();
+            this.dataFetcher = dataFetcher;
             parsedData = new Dictionary<string, string>();
         }
         public void UpdateData()
         {
                 var textToParse = dataFetcher.UpdateData();
-                var parsedData = new Dictionary<string, string>();
                 for (int i = 0; i < textToParse.Count; i++)
                 {
                     var toProcess = textToParse[i];
                     if (string.IsNullOrWhiteSpace(toProcess)) continue;
                     toProcess = new string(toProcess.SkipWhile(c => !char.IsLetterOrDigit(c)).ToArray());
                     var name = new string(toProcess.TakeWhile(c => (c == '_' || char.IsLetterOrDigit(c))).ToArray());
+                if (name == "Photo")
+                {
+                    var data = new string(toProcess.SkipWhile(c=>c!=' ').ToArray());
+                    parsedData.Add(name, data);
+                }
+                else
+                {
                     var data = new string(toProcess.TrimEnd().SkipWhile(c => !char.IsNumber(c)).ToArray());
                     parsedData.Add(name, data);
                 }
-              
+
+                }
            
         }
         public DateTime GetTimestamp()
         {
-            return DateTime.Parse(parsedData["Timestamp"]);
+            try
+            {
+                var date = DateTime.Parse(parsedData["Timestamp"]);
+                return date;
+
+            }
+            catch (KeyNotFoundException)
+            {
+                //todo logging errors
+               throw;
+                //return new DateTime();
+            }
         }
 
         public Dictionary<string, double> FetchNumericData()
@@ -48,12 +66,28 @@ namespace sampleserver.Infrastructure
             }
             return DataFetched;
         }
+
+        public string ParsePhotoLink()
+        {
+            try
+            {
+                var link = parsedData["Photo"];
+                return link;
+            }
+            catch (Exception)
+            {
+                //todo logging errors
+                return string.Empty;
+            }
+        }
     }
 
     public interface ITelemetryParser
     {
         void UpdateData();
+        string ParsePhotoLink();
         DateTime GetTimestamp();
         Dictionary<string, double> FetchNumericData();
+        Dictionary<string, string> parsedData { get; }
     }
 }

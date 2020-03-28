@@ -27,6 +27,7 @@ namespace sampleserver.Infrastructure
                 //todo: display error message
                 return new List<string>();
             }
+
             document.OptionWriteEmptyNodes = true;
             var text = document.DocumentNode.SelectSingleNode("//hr");
             List<string> textToParse = new List<string>();
