@@ -12,6 +12,7 @@ namespace sampleserver.Views
 #if DEBUG
             this.AttachDevTools();
 #endif
+            
         }
 
         private void InitializeComponent()

@@ -1,14 +1,21 @@
-﻿      <Window xmlns="https://github.com/avaloniaui"
+﻿        <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:sampleserver.ViewModels;assembly=sampleserver"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:imaging="clr-namespace:Avalonia.Media.Imaging;assembly=Avalonia.Visuals"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="sampleserver.Views.MainWindow"
          Icon="/Assets/sample.ico"
         Title="SAMPLE server client"
               WindowState="Maximized">
-        
+        <Window.Resources>
+          <imaging:Bitmap x:Key="humidity">
+            <x:Arguments>
+              <x:String>Humidity.png</x:String>
+            </x:Arguments>
+          </imaging:Bitmap>
+        </Window.Resources>
   <Design.DataContext>
     <vm:MainWindowViewModel/>
   </Design.DataContext>
@@ -25,13 +32,14 @@
     
     <ScrollViewer Grid.Column="0" Grid.Row="0">
     <StackPanel Background="AliceBlue" Grid.Column="0" Grid.Row="0">
-      <Image Source="/Assets/quickstart.png" > </Image>
+      <Image Source="/Assets/Humidity.png" >
+              </Image>
       <TextBlock HorizontalAlignment="Center"> humidity </TextBlock>
-      <Image Source="/Assets/quickstart.png" > </Image>
+      <Image Source="/Assets/Pressure.png" > </Image>
       <TextBlock HorizontalAlignment="Center" > pressure </TextBlock>
       <Image Source="/Assets/quickstart.png"   > </Image>
       <TextBlock HorizontalAlignment="Center"> light intensity </TextBlock>
-      <Image Source="/Assets/quickstart.png"   > </Image>
+      <Image Source="/Assets/Light.png"   > </Image>
       <TextBlock HorizontalAlignment="Center"> lights </TextBlock>
     </StackPanel>
     </ScrollViewer>
@@ -40,7 +48,7 @@
       <StackPanel Background="PaleGoldenrod" Grid.Column="1" Grid.Row="0" Spacing="1">
       <TextBlock Text="Control room console" HorizontalAlignment="Center"> </TextBlock>
       <TextBlock Text="SAMPLE" FontSize="16" HorizontalAlignment="Center" ></TextBlock>
-      <Image Source="/Assets/quickstart.png"  > </Image>
+      <Image Source="/Assets/Temperature.png"  > </Image>
       <TextBlock HorizontalAlignment="Center"> temperature </TextBlock>
       <Image Source="/Assets/quickstart.png"  > </Image>
       <TextBlock HorizontalAlignment="Center" > airfan </TextBlock>
@@ -55,6 +63,7 @@
     <StackPanel Background="PaleGreen" Grid.Column="2" Grid.Row="0">
       <Image HorizontalAlignment="Center" Margin="10,10,10,10" Source="/Assets/downloaded_photo.png"></Image>
       <TextBlock HorizontalAlignment="Center" > Last downloaded photo</TextBlock>
+      <Button Content="Download photo" Width="150" HorizontalAlignment="Center"> </Button>
       <TextBlock HorizontalAlignment="Center" Text="{Binding Greeting}" ></TextBlock>
       
 

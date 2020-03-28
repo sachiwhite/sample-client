@@ -17,13 +17,21 @@ namespace sampleserver.ViewModels
         private DispatcherTimer timer;
         private static readonly HttpClient client = new HttpClient();
         private string greeting = "";
-        private string RequestUri = "127.0.0.1:2137";
+        private string RequestUri = "192.168.0.19:2137";
         private TelemetryInformationContainer telemetryInformationContainer;
+        private string humidityPicPath;
+        public string HumidityPicPath
+        {
+            get { return humidityPicPath; }
+            set { humidityPicPath = value; }
+        }
+
+
         //for debugging purposes
         int i = 0;
         public MainWindowViewModel()
         {
-            
+            humidityPicPath=@"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\Humidity.png";
             SendTelemetryCommand = ReactiveCommand.CreateFromTask<string>(SendTelemetry);
              GetDataFromIndex = ReactiveCommand.Create(() =>
             {
@@ -89,7 +97,7 @@ namespace sampleserver.ViewModels
             set { greeting = this.RaiseAndSetIfChanged(ref greeting, value); }
         }
         public ReactiveCommand<string, Unit> SendTelemetryCommand { get; }
-        public ReactiveCommand<Unit, Unit> GetDataFromIndex { get; }
+        public ReactiveCommand<Unit, Unit> GetDataFromIndex { get; } 
         public ReactiveCommand<Unit, Unit> GetDataFromXYZ { get; }
     }
 }

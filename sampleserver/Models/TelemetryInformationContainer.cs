@@ -18,27 +18,29 @@ namespace sampleserver.Models
    public class TelemetryInformationContainer
     {
         private PlotCreator creator;
-        public DataFetcher DataFetcher { get; }
+        public TelemetryParser DataParser { get; }
         public List<DateTime> LastTimestamps { get; private set; }
         private Dictionary<string, IDataItem> Measures;
 
         public TelemetryInformationContainer()
         {
-            DataFetcher = new DataFetcher();
+            DataParser = new TelemetryParser();
             creator = new PlotCreator();
             Measures = new Dictionary<string, IDataItem>();
-            //for debugging purpose, it will be deleted when timestamps can be 
+            //for debugging purpose, it will be deleted when timestamps can be obtained
             LastTimestamps = new List<DateTime>();
             LastTimestamps.Add(new DateTime(2019, 3, 12, 0, 0, 0));
         }
         public void UpdateItems()
         {
-            var dataToProcess = DataFetcher.GetFetchNumericData();
+            DataParser.UpdateData();
+            LastTimestamps.Add(DataParser.GetTimestamp());
+            var dataToProcess = DataParser.FetchNumericData();
             foreach (var item in dataToProcess)
             {
                 var key = item.Key;
                 var value = item.Value;
-                if(Measures.ContainsKey(key))
+                if (Measures.ContainsKey(key))
                 {
                     Measures[key].LastMeasures.Add(value);
                 }
@@ -48,11 +50,14 @@ namespace sampleserver.Models
                     Measures.Add(key, measureToAdd);
                 }
             }
+            CreatePlots();
+        }
+        private void CreatePlots()
+        {
             foreach (var measure in Measures)
             {
                 creator.ReturnPlot(LastTimestamps[0], measure.Value.LastMeasures, measure.Key);
-            }  
+            }
         }
-
     }
 }
