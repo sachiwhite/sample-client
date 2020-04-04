@@ -5,20 +5,12 @@ using System.Text;
 
 namespace sampleserver.Models
 {
-    public enum ValuesMeasured
-    {
-        Humidity,
-        Pressure,
-        Light_Intensity,
-        Lights,
-        Temperature,
-        Airfan,
-        Heater
-    }
+    
    public class TelemetryInformationContainer
     {
+        
         private PlotCreator creator;
-        public TelemetryParser DataParser { get; }
+        public ITelemetryParser DataParser { get; }
         public List<DateTime> LastTimestamps { get; private set; }
         private Dictionary<string, IDataItem> Measures;
 
@@ -27,30 +19,41 @@ namespace sampleserver.Models
             DataParser = new TelemetryParser(new DataFetcher());
             creator = new PlotCreator();
             Measures = new Dictionary<string, IDataItem>();
-            //for debugging purpose, it will be deleted when timestamps can be obtained
             LastTimestamps = new List<DateTime>();
-            LastTimestamps.Add(new DateTime(2019, 3, 12, 0, 0, 0));
+        }
+        public TelemetryInformationContainer(ITelemetryParser telemetryParser)
+        {
+            DataParser = telemetryParser;
+            creator = new PlotCreator();
+            Measures = new Dictionary<string, IDataItem>();
+            LastTimestamps = new List<DateTime>();
         }
         public void UpdateItems()
         {
             DataParser.UpdateData();
-            LastTimestamps.Add(DataParser.GetTimestamp());
+            
+            var timestampToAdd = DataParser.GetTimestamp();
             var dataToProcess = DataParser.FetchNumericData();
-            foreach (var item in dataToProcess)
+            if (timestampToAdd!=null || dataToProcess.Count!=0)
             {
-                var key = item.Key;
-                var value = item.Value;
-                if (Measures.ContainsKey(key))
+                LastTimestamps.Add((DateTime)timestampToAdd);
+                foreach (var item in dataToProcess)
                 {
-                    Measures[key].LastMeasures.Add(value);
+                    var key = item.Key;
+                    var value = item.Value;
+                    if (Measures.ContainsKey(key))
+                    {
+                        Measures[key].LastMeasures.Add(value);
+                    }
+                    else
+                    {
+                        var measureToAdd = new IDataItem(value);
+                        Measures.Add(key, measureToAdd);
+                    }
                 }
-                else
-                {
-                    var measureToAdd = new IDataItem(value);
-                    Measures.Add(key, measureToAdd);
-                }
+                CreatePlots();
             }
-            CreatePlots();
+            
         }
         private void CreatePlots()
         {

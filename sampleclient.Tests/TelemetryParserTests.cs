@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Ninject;
 using NUnit.Framework;
 using sampleserver.Infrastructure;
 using System;
@@ -9,20 +10,6 @@ namespace sampleclient.Tests
 {
     public class TelemetryParserTests
     {
-        List<string> expected = new List<string>()
-            {
-                "\n        \n        \n        \n        \n\tTimestamp: 2020-03-21 13:57:31 ",
-                "\n\tTemperature: 27.5 ",
-                "\n\tHumidity: 98.0 ",
-                "\n\tPressure: 100.0 ",
-                "\n\tLight_intensity: 0.4 ",
-                " \n\tNo_of_lamps: 2 ",
-                "\n\tNo_of_airfans: 1 ",
-                "\n\tNo_of_heaters: 0 ",
-                "\n\tPhoto: TBD ",
-                "",
-                "\n\n    "
-            };
         Dictionary<string, string> expectedParsedData = new Dictionary<string, string>()
         {
             {"Timestamp", "2020-03-21 13:57:31"},
@@ -35,15 +22,11 @@ namespace sampleclient.Tests
             {"No_of_heaters", "0"},
             { "Photo", " TBD "}
         };
-        IDataFetcher dataFetcher;
         IDataFetcher dataFetcherFailure;
 
         [SetUp]
         public void Setup()
         {
-            Mock<IDataFetcher> dataFetcherMock = new Mock<IDataFetcher>();
-            dataFetcherMock.Setup(x => x.UpdateData()).Returns(expected);
-            dataFetcher = dataFetcherMock.Object;
             Mock<IDataFetcher> dataFetcherFailureMock = new Mock<IDataFetcher>();
             dataFetcherFailureMock.Setup(x => x.UpdateData()).Returns(new List<string>());
             dataFetcherFailure = dataFetcherFailureMock.Object;
@@ -51,6 +34,9 @@ namespace sampleclient.Tests
         [Test]
         public void TelemetryParser_UpdateData_Success()
         {
+            IKernel kernel = new StandardKernel();
+            kernel.Bind<IDataFetcher>().To<MockDataFetcher>();
+            IDataFetcher dataFetcher = kernel.Get<IDataFetcher>();
             var telemetryParser = new TelemetryParser(dataFetcher);
             telemetryParser.UpdateData();
             CollectionAssert.AreEquivalent(expectedParsedData, telemetryParser.parsedData);
@@ -58,6 +44,9 @@ namespace sampleclient.Tests
         [Test]
         public void TelemetryParser_ParseTimestamp()
         {
+            IKernel kernel = new StandardKernel();
+            kernel.Bind<IDataFetcher>().To<MockDataFetcher>();
+            IDataFetcher dataFetcher = kernel.Get<IDataFetcher>();
             var telemetryParser = new TelemetryParser(dataFetcher);
             telemetryParser.UpdateData();
             var actualDate = telemetryParser.GetTimestamp();
@@ -67,6 +56,9 @@ namespace sampleclient.Tests
         [Test]
         public void TelemetryParser_ParseNumericValues()
         {
+            IKernel kernel = new StandardKernel();
+            kernel.Bind<IDataFetcher>().To<MockDataFetcher>();
+            IDataFetcher dataFetcher = kernel.Get<IDataFetcher>();
             var telemetryParser = new TelemetryParser(dataFetcher);
             telemetryParser.UpdateData();
             var expectedNumericValues = new Dictionary<string, double>()
@@ -85,9 +77,19 @@ namespace sampleclient.Tests
         [Test]
         public void TelemetryParser_ParsePhotoLink()
         {
+            IKernel kernel = new StandardKernel();
+            kernel.Bind<IDataFetcher>().To<MockDataFetcher>();
+            IDataFetcher dataFetcher = kernel.Get<IDataFetcher>();
             var telemetryParser = new TelemetryParser(dataFetcher);
             telemetryParser.UpdateData();
             Assert.AreEqual(" TBD ", telemetryParser.ParsePhotoLink());
+        }
+        [Test]
+        public void TelemetryParser_ParseTimestamp_Failure()
+        {
+            var telemetryParser = new TelemetryParser(dataFetcherFailure);
+            telemetryParser.UpdateData();
+            Assert.AreEqual(null, telemetryParser.GetTimestamp());
         }
         [Test]
         public void TelemetryParser_ParseNumericValues_Failure()
@@ -103,5 +105,13 @@ namespace sampleclient.Tests
             telemetryParser.UpdateData();
             Assert.AreEqual(string.Empty, telemetryParser.ParsePhotoLink());
         }
+        [Test]
+        public void TelemetryParser_UpdateData_Failure()
+        {
+            var telemetryParser = new TelemetryParser(dataFetcherFailure);
+            telemetryParser.UpdateData();
+            CollectionAssert.AreEquivalent(new Dictionary<string, string>(), telemetryParser.parsedData);
+        }
+       
     }
 }

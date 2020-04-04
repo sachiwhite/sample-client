@@ -15,9 +15,8 @@ namespace sampleserver.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private DispatcherTimer timer;
-        private static readonly HttpClient client = new HttpClient();
         private string greeting = "";
-        private string RequestUri = "192.168.0.19:2137";
+        private string RequestUri = "192.168.0.18:2137";
         private TelemetryInformationContainer telemetryInformationContainer;
         private string humidityPicPath;
         public string HumidityPicPath
@@ -46,10 +45,11 @@ namespace sampleserver.ViewModels
                     Greeting = reader.ReadToEnd();
                 }
             });
+
             telemetryInformationContainer = new TelemetryInformationContainer();
             timer = new DispatcherTimer();
             // timer.Interval = new TimeSpan(0, 5, 0); //real value
-            timer.Interval = new TimeSpan(0, 0, 5); //value for tests
+            timer.Interval = new TimeSpan(0, 0, 1); //value for tests
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -58,36 +58,40 @@ namespace sampleserver.ViewModels
         {
             telemetryInformationContainer.UpdateItems();
             i++;
-            if (i == 10) timer.Stop();
+            if (i == 10)
+            {
+                timer.Stop();
+                Console.WriteLine("finished");
+            }
             //TODO: update the model and the view every 5 minutes
         }
 
         private async Task SendTelemetry(string command)
         {
-            var values = new Dictionary<string, string>
-            {
-                {"telecommand", command }
-            };
-            var content = new FormUrlEncodedContent(values);
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await client.PostAsync(new UriBuilder(RequestUri + "/telecommands").Uri, content);
-            }
-            //catch (ArgumentNullException ex)
+            //var values = new Dictionary<string, string>
+            //{
+            //    {"telecommand", command }
+            //};
+            //var content = new FormUrlEncodedContent(values);
+            //HttpResponseMessage response = null;
+            //try
+            //{
+            //    response = await client.PostAsync(new UriBuilder(RequestUri + "/telecommands").Uri, content);
+            //}
+            ////catch (ArgumentNullException ex)
+            ////{
+            ////    //TODO: displaying errors
+                
+            ////}
+            //catch(HttpRequestException hex)
             //{
             //    //TODO: displaying errors
-                
             //}
-            catch(HttpRequestException hex)
-            {
-                //TODO: displaying errors
-            }
-            if (response!=null)
-            {
-                var responseString = await response.Content.ReadAsStringAsync();
-                Greeting = responseString;
-            }
+            //if (response!=null)
+            //{
+            //    var responseString = await response.Content.ReadAsStringAsync();
+            //    Greeting = responseString;
+            //}
             
         }
 

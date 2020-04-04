@@ -6,7 +6,7 @@ using System.Text;
 
 namespace sampleserver.Infrastructure
 {
-    public class TelemetryParser :ITelemetryParser
+    public class TelemetryParser : ITelemetryParser
     {
         private IDataFetcher dataFetcher;
         public Dictionary<string, string> parsedData { get; private set; }
@@ -17,6 +17,7 @@ namespace sampleserver.Infrastructure
         }
         public void UpdateData()
         {
+                parsedData = new Dictionary<string, string>();
                 var textToParse = dataFetcher.UpdateData();
                 for (int i = 0; i < textToParse.Count; i++)
                 {
@@ -33,12 +34,13 @@ namespace sampleserver.Infrastructure
                 {
                     var data = new string(toProcess.TrimEnd().SkipWhile(c => !char.IsNumber(c)).ToArray());
                     parsedData.Add(name, data);
+                                     
                 }
 
                 }
            
         }
-        public DateTime GetTimestamp()
+        public DateTime? GetTimestamp()
         {
             try
             {
@@ -48,9 +50,8 @@ namespace sampleserver.Infrastructure
             }
             catch (KeyNotFoundException)
             {
-                //todo logging errors
-               throw;
-                //return new DateTime();
+                #warning todo logging errors
+                return null; //return new DateTime();
             }
         }
 
@@ -76,7 +77,7 @@ namespace sampleserver.Infrastructure
             }
             catch (Exception)
             {
-                //todo logging errors
+                #warning todo: logging errors
                 return string.Empty;
             }
         }
@@ -86,7 +87,7 @@ namespace sampleserver.Infrastructure
     {
         void UpdateData();
         string ParsePhotoLink();
-        DateTime GetTimestamp();
+        DateTime? GetTimestamp();
         Dictionary<string, double> FetchNumericData();
         Dictionary<string, string> parsedData { get; }
     }
