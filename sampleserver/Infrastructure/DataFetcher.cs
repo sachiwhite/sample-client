@@ -10,7 +10,7 @@ namespace sampleserver.Infrastructure
     public class DataFetcher :IDataFetcher
     {
         HtmlWeb htmlWeb;
-        private readonly string RequestUri = "192.168.0.18:2137/telemetry";
+        private readonly string RequestUri = "192.168.0.19:2137/telemetry";
         public DataFetcher()
         {
             htmlWeb = new HtmlWeb();
@@ -38,9 +38,6 @@ namespace sampleserver.Infrastructure
             }
             return textToParse;
         }
-       
-        
-        
     }
 
     public interface IDataFetcher

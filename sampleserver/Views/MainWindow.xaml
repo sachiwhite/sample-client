@@ -7,18 +7,14 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="sampleserver.Views.MainWindow"
          Icon="/Assets/sample.ico"
+                Name="sampleWindow"
         Title="SAMPLE server client"
               WindowState="Maximized">
-        <Window.Resources>
-          <imaging:Bitmap x:Key="humidity">
-            <x:Arguments>
-              <x:String>Humidity.png</x:String>
-            </x:Arguments>
-          </imaging:Bitmap>
-        </Window.Resources>
+          
   <Design.DataContext>
     <vm:MainWindowViewModel/>
   </Design.DataContext>
+          
   <Grid ShowGridLines="True">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"></ColumnDefinition>
@@ -32,15 +28,14 @@
     
     <ScrollViewer Grid.Column="0" Grid.Row="0">
     <StackPanel Background="AliceBlue" Grid.Column="0" Grid.Row="0">
-      <Image Source="/Assets/Humidity.png" >
-              </Image>
+      <Image Name="humidity" Source="/Assets/Humidity.png" >  </Image>
       <TextBlock HorizontalAlignment="Center"> humidity </TextBlock>
-      <Image Source="/Assets/Pressure.png" > </Image>
+      <Image Name="pressure" Source="/Assets/Pressure.png" > </Image>
       <TextBlock HorizontalAlignment="Center" > pressure </TextBlock>
-      <Image Source="/Assets/quickstart.png"   > </Image>
+      <Image Name="light_intensity" Source="/Assets/Light_intensity.png"   > </Image>
       <TextBlock HorizontalAlignment="Center"> light intensity </TextBlock>
-      <Image Source="/Assets/Light.png"   > </Image>
-      <TextBlock HorizontalAlignment="Center"> lights </TextBlock>
+      <Image Name="no_of_lamps" Source="/Assets/Light.png"   > </Image>
+      <TextBlock HorizontalAlignment="Center"> no of lamps </TextBlock>
     </StackPanel>
     </ScrollViewer>
     
@@ -48,12 +43,12 @@
       <StackPanel Background="PaleGoldenrod" Grid.Column="1" Grid.Row="0" Spacing="1">
       <TextBlock Text="Control room console" HorizontalAlignment="Center"> </TextBlock>
       <TextBlock Text="SAMPLE" FontSize="16" HorizontalAlignment="Center" ></TextBlock>
-      <Image Source="/Assets/Temperature.png"  > </Image>
+      <Image Name="temperature" Source="/Assets/Temperature.png"  > </Image>
       <TextBlock HorizontalAlignment="Center"> temperature </TextBlock>
-      <Image Source="/Assets/quickstart.png"  > </Image>
-      <TextBlock HorizontalAlignment="Center" > airfan </TextBlock>
-      <Image Source="/Assets/quickstart.png"   > </Image>
-      <TextBlock HorizontalAlignment="Center"> heater </TextBlock>
+      <Image Name="no_of_airfans" Source="/Assets/quickstart.png"  > </Image>
+      <TextBlock HorizontalAlignment="Center" > no of airfans </TextBlock>
+      <Image Name="no_of_heaters" Source="/Assets/quickstart.png"   > </Image>
+      <TextBlock HorizontalAlignment="Center"> no of heaters </TextBlock>
     </StackPanel>
       
     </ScrollViewer>
@@ -63,7 +58,14 @@
     <StackPanel Background="PaleGreen" Grid.Column="2" Grid.Row="0">
       <Image HorizontalAlignment="Center" Margin="10,10,10,10" Source="/Assets/downloaded_photo.png"></Image>
       <TextBlock HorizontalAlignment="Center" > Last downloaded photo</TextBlock>
-      <Button Content="Download photo" Width="150" HorizontalAlignment="Center"> </Button>
+      <Button
+         Width="150"
+        Command="{Binding ChangePictureFromModel}">change humidity picture </Button>
+      <Button
+        Command="{Binding ChangePictureCommand}"     
+        CommandParameter="{Binding ElementName=sampleWindow}"
+        Content="change humidity pic" Width="150" HorizontalAlignment="Center">
+      </Button>
       <TextBlock HorizontalAlignment="Center" Text="{Binding Greeting}" ></TextBlock>
       
 
@@ -72,6 +74,7 @@
     <StackPanel Background="Bisque" Grid.Row="1" Grid.ColumnSpan="3" >
       <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top">Enter command here</TextBlock>
       <TextBox x:Name="telemetryCommandTextBox" Height="30" HorizontalAlignment="Stretch"> </TextBox>
+     
       <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Command="{Binding SendTelemetryCommand}" 
               CommandParameter="{Binding Text, ElementName=telemetryCommandTextBox}"> Send</Button>
     </StackPanel>

@@ -8,7 +8,7 @@ namespace sampleserver.Infrastructure
 {
     public class TelecommandSender
     {
-        private string RequestUri = "192.168.0.19:2137";
+        private string RequestUri = "192.168.0.18:2137";
         private static readonly HttpClient client = new HttpClient();
         public async Task SendTelecommandAsync(string command)
         {
@@ -34,6 +34,7 @@ namespace sampleserver.Infrastructure
             if (response != null)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseString);
             }
 
         }
