@@ -8,7 +8,7 @@ namespace sampleserver.Models
     
    public class TelemetryInformationContainer
     {
-        
+        private IPictureFetcher pictureFetcher;
         private PlotCreator creator;
         public ITelemetryParser DataParser { get; }
         public List<DateTime> LastTimestamps { get; private set; }
@@ -23,8 +23,10 @@ namespace sampleserver.Models
             Measures = new Dictionary<string, IDataItem>();
             LastTimestamps = new List<DateTime>();
         }
-        public TelemetryInformationContainer(ITelemetryParser telemetryParser)
+        public TelemetryInformationContainer(ITelemetryParser telemetryParser, IPictureFetcher pictureFetcher)
         {
+            countOfRecordsToStore = 20;
+            this.pictureFetcher=pictureFetcher;
             DataParser = telemetryParser;
             creator = new PlotCreator();
             Measures = new Dictionary<string, IDataItem>();
@@ -61,7 +63,11 @@ namespace sampleserver.Models
             }
             
         }
-
+        public string FetchPicture()
+        {
+            pictureFetcher.FetchPicture();
+            return pictureFetcher.LastPictureFetchedPath;
+        }
         private void FlushOldRecords()
         {
             LastTimestamps.RemoveAt(0);

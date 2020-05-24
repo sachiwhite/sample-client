@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
+using System.Diagnostics;
 
 namespace sampleserver.Views
 {
@@ -19,7 +20,9 @@ namespace sampleserver.Views
     public class MainWindow : Window, IChangeImages
     {
         private const string FileName = @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\";
+        private const string PhotoName =  @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\downloaded_photos\";
         private Image[] images;
+        private Image downloadedPicture;
         public MainWindow()
         {
             InitializeComponent();
@@ -32,9 +35,35 @@ namespace sampleserver.Views
         public void ChangePic(int number)
         {
             var filename = FileName + (Images)(number) + ".png";
-            Bitmap bitmap = new Bitmap(filename);
-            images[number].Source = bitmap;
+            try
+            {
+                Bitmap bitmap = new Bitmap(filename);
+                images[number].Source = bitmap;
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                throw;
+            }
+           
         }
+
+        public void UpdatePicture(string filename)
+        {
+            try
+            {
+                Bitmap bitmap = new Bitmap(filename);
+                downloadedPicture.Source = bitmap;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+           
+            
+        }
+
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
@@ -46,11 +75,7 @@ namespace sampleserver.Views
             images[4] = this.FindControl<Image>("temperature");
             images[5] = this.FindControl<Image>("no_of_airfans");
             images[6] = this.FindControl<Image>("no_of_heaters");
+            downloadedPicture = this.FindControl<Image>("downloaded_photo");
         }
-    }
-
-    public interface IChangeImages
-    {
-        void ChangePic(int number);
     }
 }

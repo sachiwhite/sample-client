@@ -8,7 +8,7 @@ namespace sampleserver.Infrastructure
 {
     public class TelemetryParser : ITelemetryParser
     {
-        private IDataFetcher dataFetcher;
+        private readonly IDataFetcher dataFetcher;
         public Dictionary<string, string> parsedData { get; private set; }
         public TelemetryParser(IDataFetcher dataFetcher)
         {
