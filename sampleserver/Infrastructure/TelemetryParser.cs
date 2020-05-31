@@ -31,22 +31,21 @@ namespace sampleserver.Infrastructure
             }
             catch (ArgumentNullException ex)
             {
-
-                #warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage = "An error occurred in TelemetryParser while updating data. An object to populate with values from JSON file was null.";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage,ex.Message,ex.StackTrace);
             }
             catch (JsonException ex)
             {
-                #warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage= "An error occurred in TelemetryParser while updating data. Downloaded JSON file is invalid.";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
             catch (Exception ex)
             {
-                #warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage= "An unknown error occurred in TelemetryParser while updating data. ";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
 
         }

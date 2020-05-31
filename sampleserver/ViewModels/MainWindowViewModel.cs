@@ -22,14 +22,19 @@ namespace sampleserver.ViewModels
     {
         private TelemetryInformationContainer telemetryInformationContainer;
         private TelecommandData telecommandData;
-        
+        public string EventLog
+        {
+            get => EventLogger.ErrorLog;
+            set => this.RaiseAndSetIfChanged(ref EventLogger.ErrorLog, value);
+        }
+
         private async Task ChangeImage(IChangeImages window)
         {
             while (true)
             {
                 await Task.Run(async () =>
                 {
-                    telemetryInformationContainer.UpdateItems();
+                    await telemetryInformationContainer.UpdateItems();
                     await Task.Delay(1000);
                 });
                 if (window != null)
@@ -37,30 +42,35 @@ namespace sampleserver.ViewModels
                     for (int i = 0; i < 7; i++)
                         window.ChangePic(i);
                 }
+                this.RaisePropertyChanged("EventLog");
 
             }
-            
-        }
 
-        public MainWindowViewModel(TelecommandData telecommandData,TelemetryInformationContainer telemetryInformationContainer=null)
+        }
+        //for designer purposes
+        public MainWindowViewModel()
         {
 
-            this.telecommandData=telecommandData;
-            this.telemetryInformationContainer = telemetryInformationContainer; 
+        }
+        public MainWindowViewModel(TelecommandData telecommandData, TelemetryInformationContainer telemetryInformationContainer = null)
+        {
+
+            this.telecommandData = telecommandData;
+            this.telemetryInformationContainer = telemetryInformationContainer;
             ChangePictureCommand = ReactiveCommand.CreateFromTask<IChangeImages>(ChangeImage);
             SendTelemetryCommand = ReactiveCommand.CreateFromTask<string>(SendTelemetry);
             DownloadPictureCommand = ReactiveCommand.CreateFromTask<IChangeImages>(DownloadPicture);
-           
+
         }
 
         private async Task DownloadPicture(IChangeImages window)
         {
             var downloadedImageFilePath = telemetryInformationContainer.FetchPicture();
-            if (window!=null)
+            if (window != null)
             {
                 window.UpdatePicture(downloadedImageFilePath);
             }
-           
+
         }
 
         private async Task SendTelemetry(string command)

@@ -38,6 +38,7 @@ namespace sampleserver.Infrastructure
                 }
                 
             }
+            await EventLogger.LogForUser("Connection established.");
             return json;
         }
     }

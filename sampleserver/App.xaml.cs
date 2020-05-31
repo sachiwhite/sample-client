@@ -33,7 +33,7 @@ namespace sampleserver
             container.Bind<TelemetryInformationContainer>().ToSelf();
         }
 
-        public override void OnFrameworkInitializationCompleted()
+        public override async void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -44,7 +44,7 @@ namespace sampleserver
                     DataContext = new MainWindowViewModel(telecommandData, telemetryInformationContainer),
                 };
             }
-
+            //await EventLogger.OnLoading();
             base.OnFrameworkInitializationCompleted();
         }
     }
