@@ -1,42 +1,44 @@
-﻿using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace sampleserver.Infrastructure
 {
-    public class DataFetcher :IDataFetcher
+    public class DataFetcher : IDataFetcher
     {
-        HtmlWeb htmlWeb;
-        private readonly string RequestUri = "192.168.1.100:2137/telemetry";
-        public DataFetcher()
-        {
-            htmlWeb = new HtmlWeb();
-        }
-        public List<string> UpdateData()
-        {
-            HtmlDocument document = new HtmlDocument();
-            try
-            {
-                document = htmlWeb.Load(new UriBuilder(RequestUri).Uri);
-            }
-            catch (Exception ex)
-            {
-                //todo: display error message
-                return new List<string>();
-            }
+        private string RequestUri = "192.168.1.100:80/get_telemetry";
+        private ConnectionConfiguration configuration;
 
-            document.OptionWriteEmptyNodes = true;
-            var text = document.DocumentNode.SelectSingleNode("//hr");
-            List<string> textToParse = new List<string>();
-            while (text.NextSibling != null)
+        public DataFetcher(ConnectionConfiguration configuration)
+        {
+            this.configuration = configuration;
+            RequestUri = $"{configuration.RequestUri}/get_telemetry";
+        }
+        public async Task<string> UpdateData()
+        {
+            string json = string.Empty;
+            using (var httpClient = new HttpClient())
             {
-                textToParse.Add(text.NextSibling.InnerText);
-                text = text.NextSibling;
+                try
+                {
+                    var Uri = new UriBuilder(RequestUri).Uri;
+                    json = await httpClient.GetStringAsync(Uri);
+                }
+                catch(ArgumentNullException anex)
+                {
+                    Debug.WriteLine(anex.Message);
+                    Debug.WriteLine(anex.StackTrace);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.StackTrace);
+
+                }
+                
             }
-            return textToParse;
+            return json;
         }
     }
 }

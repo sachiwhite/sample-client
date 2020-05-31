@@ -20,7 +20,6 @@ namespace sampleserver.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string FileName = @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\downloaded_photos\";
         private TelemetryInformationContainer telemetryInformationContainer;
         private TelecommandData telecommandData;
         
@@ -43,10 +42,10 @@ namespace sampleserver.ViewModels
             
         }
 
-        public MainWindowViewModel(TelemetryInformationContainer telemetryInformationContainer=null)
+        public MainWindowViewModel(TelecommandData telecommandData,TelemetryInformationContainer telemetryInformationContainer=null)
         {
 
-            telecommandData=new TelecommandData();
+            this.telecommandData=telecommandData;
             this.telemetryInformationContainer = telemetryInformationContainer; 
             ChangePictureCommand = ReactiveCommand.CreateFromTask<IChangeImages>(ChangeImage);
             SendTelemetryCommand = ReactiveCommand.CreateFromTask<string>(SendTelemetry);

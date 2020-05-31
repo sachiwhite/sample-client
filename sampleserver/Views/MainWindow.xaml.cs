@@ -7,20 +7,9 @@ using System.Diagnostics;
 
 namespace sampleserver.Views
 {
-    public enum Images
-    {
-        Humidity,
-        Pressure,
-        Light_intensity,
-        No_of_lamps,
-        Temperature,
-        No_of_airfans,
-        No_of_heaters
-    }
     public class MainWindow : Window, IChangeImages
     {
         private const string FileName = @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\";
-        private const string PhotoName =  @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\downloaded_photos\";
         private Image[] images;
         private Image downloadedPicture;
         public MainWindow()
@@ -34,7 +23,7 @@ namespace sampleserver.Views
     
         public void ChangePic(int number)
         {
-            var filename = FileName + (Images)(number) + ".png";
+            var filename = FileName + (Parameters)(number) + ".png";
             try
             {
                 Bitmap bitmap = new Bitmap(filename);
@@ -42,6 +31,7 @@ namespace sampleserver.Views
             }
             catch (System.Exception ex)
             {
+                #warning todo logging errors
                 System.Console.WriteLine(ex.Message);
                 throw;
             }
@@ -57,6 +47,7 @@ namespace sampleserver.Views
             }
             catch (System.Exception ex)
             {
+                #warning todo logging errors
                 Debug.WriteLine(ex.Message);
             }
            

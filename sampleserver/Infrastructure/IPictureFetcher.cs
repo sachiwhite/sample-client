@@ -1,9 +1,11 @@
-﻿namespace sampleserver.Infrastructure
+﻿using System.Threading.Tasks;
+
+namespace sampleserver.Infrastructure
 {
     public interface IPictureFetcher
     {
         string LastPictureFetchedPath { get; }
 
-        public bool FetchPicture();
+        Task<bool> FetchPicture();
     }
 }

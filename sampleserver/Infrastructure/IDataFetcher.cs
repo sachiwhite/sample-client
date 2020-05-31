@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace sampleserver.Infrastructure
 {
     public interface IDataFetcher
     {
-        List<string> UpdateData();
+        Task<string> UpdateData();
     }
 }

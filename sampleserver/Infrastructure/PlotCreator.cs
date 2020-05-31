@@ -12,7 +12,7 @@ namespace sampleserver.Infrastructure
         {
             var plot = new Plot(400, 200);
             double points = 24 * 60 / 5;
-            plot.PlotSignal(lastMeasures.ToArray(), sampleRate: points, xOffset: start.ToOADate(), yOffset:lastMeasures.Min()-1) ;
+            plot.PlotSignal(lastMeasures.ToArray(), sampleRate: points, xOffset: start.ToOADate()) ;
             plot.Ticks(dateTimeX: true, displayTickLabelsX: true, displayTicksXminor: true);
             plot.YLabel(name);
             plot.SaveFig(@$"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\{name}.png");

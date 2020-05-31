@@ -8,10 +8,10 @@ namespace sampleserver.Models
 {
     public class TelecommandData
     {
-        public TelecommandSender sender;
-        public TelecommandData()
+        public ITelecommandSender sender;
+        public TelecommandData(ITelecommandSender sender)
         {
-            sender = new TelecommandSender();
+            this.sender = sender;
         }
         public async Task SendTelecommand(string command)
         {

@@ -74,16 +74,7 @@ namespace sampleclient.Tests
             };
             CollectionAssert.AreEquivalent(expectedNumericValues, telemetryParser.FetchNumericData());
         }
-        [Test]
-        public void TelemetryParser_ParsePhotoLink()
-        {
-            IKernel kernel = new StandardKernel();
-            kernel.Bind<IDataFetcher>().To<MockDataFetcher>();
-            IDataFetcher dataFetcher = kernel.Get<IDataFetcher>();
-            var telemetryParser = new TelemetryParser(dataFetcher);
-            telemetryParser.UpdateData();
-            Assert.AreEqual(" TBD ", telemetryParser.ParsePhotoLink());
-        }
+        
         [Test]
         public void TelemetryParser_ParseTimestamp_Failure()
         {
@@ -98,13 +89,7 @@ namespace sampleclient.Tests
             telemetryParser.UpdateData();
             CollectionAssert.AreEquivalent(new Dictionary<string, double>(), telemetryParser.FetchNumericData());
         }
-        [Test]
-        public void TelemetryParser_ParsePhotoLink_Failure()
-        {
-            var telemetryParser = new TelemetryParser(dataFetcherFailure);
-            telemetryParser.UpdateData();
-            Assert.AreEqual(string.Empty, telemetryParser.ParsePhotoLink());
-        }
+        
         [Test]
         public void TelemetryParser_UpdateData_Failure()
         {

@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace sampleserver.Infrastructure
 {
     public class MockDataFetcher : IDataFetcher
     {
-        public List<string> UpdateData()
+        public async Task<string> UpdateData()
         {
-            return new List<string>()
-            {
-                "\n        \n        \n        \n        \n\tTimestamp: 2020-03-21 13:57:31 ",
-                "\n\tTemperature: 27.5 ",
-                "\n\tHumidity: 98.0 ",
-                "\n\tPressure: 100.0 ",
-                "\n\tLight_intensity: 0.4 ",
-                " \n\tNo_of_lamps: 2 ",
-                "\n\tNo_of_airfans: 1 ",
-                "\n\tNo_of_heaters: 0 ",
-                "\n\tPhoto: TBD ",
-                "",
-                "\n\n    "
-            };
+            return "{\"humidity\": 954.0, \"temperature\": 124.0, \"pressure\": 119.0, \"luminosity\": 0.0, \"lamps\": 1, \"airfans\": 0, \"heaters\": 0, \"timestamp\": \"2020 - 05 - 31 15:05:17\"}";
         }
     }
 }

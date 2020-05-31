@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace sampleserver.Models
 {
@@ -15,14 +16,6 @@ namespace sampleserver.Models
         private Dictionary<string, IDataItem> Measures;
         private readonly int countOfRecordsToStore;
 
-        public TelemetryInformationContainer()
-        {
-            countOfRecordsToStore = 20;
-            DataParser = new TelemetryParser(new DataFetcher());
-            creator = new PlotCreator();
-            Measures = new Dictionary<string, IDataItem>();
-            LastTimestamps = new List<DateTime>();
-        }
         public TelemetryInformationContainer(ITelemetryParser telemetryParser, IPictureFetcher pictureFetcher)
         {
             countOfRecordsToStore = 20;
@@ -32,12 +25,12 @@ namespace sampleserver.Models
             Measures = new Dictionary<string, IDataItem>();
             LastTimestamps = new List<DateTime>();
         }
-        public void UpdateItems()
+        public async Task UpdateItems()
         {
             if (LastTimestamps.Count>countOfRecordsToStore)
                 FlushOldRecords();
             
-            DataParser.UpdateData();
+            await DataParser.UpdateData();
             
             var timestampToAdd = DataParser.GetTimestamp();
             var dataToProcess = DataParser.FetchNumericData();

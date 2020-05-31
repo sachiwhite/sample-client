@@ -1,94 +1,99 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace sampleserver.Infrastructure
 {
     public class TelemetryParser : ITelemetryParser
     {
         private readonly IDataFetcher dataFetcher;
-        public Dictionary<string, string> parsedData { get; private set; }
+        private TelemetryStorage telemetry;
+        private JsonSerializerOptions jsonSerializerOptions;
         public TelemetryParser(IDataFetcher dataFetcher)
         {
             this.dataFetcher = dataFetcher;
-            parsedData = new Dictionary<string, string>();
+            telemetry = new TelemetryStorage();
+            jsonSerializerOptions=new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive=true,
+            };
         }
-        public void UpdateData()
+        public async Task UpdateData()
         {
-                parsedData = new Dictionary<string, string>();
-                var textToParse = dataFetcher.UpdateData();
-                for (int i = 0; i < textToParse.Count; i++)
-                {
-                    var toProcess = textToParse[i];
-                    if (string.IsNullOrWhiteSpace(toProcess)) continue;
-                    toProcess = new string(toProcess.SkipWhile(c => !char.IsLetterOrDigit(c)).ToArray());
-                    var name = new string(toProcess.TakeWhile(c => (c == '_' || char.IsLetterOrDigit(c))).ToArray());
-                if (name == "Photo")
-                {
-                    var data = new string(toProcess.SkipWhile(c=>c!=' ').ToArray());
-                    parsedData.Add(name, data);
-                }
-                else
-                {
-                    var data = new string(toProcess.TrimEnd().SkipWhile(c => !char.IsNumber(c)).ToArray());
-                    parsedData.Add(name, data);
-                                     
-                }
+            var json = await dataFetcher.UpdateData();
+            try
+            {
+                telemetry = JsonSerializer.Deserialize<TelemetryStorage>(json,jsonSerializerOptions);
+            }
+            catch (ArgumentNullException ex)
+            {
 
-                }
-           
+                #warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+            catch (JsonException ex)
+            {
+                #warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                #warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+
         }
         public DateTime? GetTimestamp()
         {
             try
             {
-                var date = DateTime.Parse(parsedData["Timestamp"]);
+                var date = DateTime.Parse(telemetry.Timestamp);
                 return date;
 
             }
-            catch (KeyNotFoundException)
+            catch(ArgumentNullException ex)
             {
-                #warning todo logging errors
-                return null; //return new DateTime();
+#warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
             }
+            catch(FormatException ex)
+            {
+#warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+            catch(Exception ex)
+            {
+#warning todo logging errors
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.StackTrace);
+            }
+            return null;
         }
 
         public Dictionary<string, double> FetchNumericData()
         {
             var DataFetched = new Dictionary<string, double>();
-            foreach (var item in parsedData)
+            var numericData = telemetry.ReturnArrayOfParameters();
+            for (int i = 0; i < numericData.Length; i++)
             {
-                var key = item.Key;
-                var value = item.Value;
-                if (double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out double num))
-                    DataFetched.Add(key, num);
+                var parameterName = (Parameters)(i);
+                DataFetched.Add(
+                    parameterName.ToString(),
+                    numericData[i]
+                    );
             }
             return DataFetched;
         }
 
-        public string ParsePhotoLink()
-        {
-            try
-            {
-                var link = parsedData["Photo"];
-                return link;
-            }
-            catch (Exception)
-            {
-                #warning todo: logging errors
-                return string.Empty;
-            }
-        }
-    }
 
-    public interface ITelemetryParser
-    {
-        void UpdateData();
-        string ParsePhotoLink();
-        DateTime? GetTimestamp();
-        Dictionary<string, double> FetchNumericData();
-        Dictionary<string, string> parsedData { get; }
     }
 }

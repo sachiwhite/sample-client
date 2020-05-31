@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace sampleserver.Infrastructure
 {
@@ -50,7 +51,7 @@ namespace sampleserver.Infrastructure
             return " TBD ";
         }
 
-        public void UpdateData()
+        public async Task UpdateData()
         {
         }
     }

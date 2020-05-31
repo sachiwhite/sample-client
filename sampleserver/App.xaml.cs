@@ -24,9 +24,12 @@ namespace sampleserver
         private void ConfigureContainer()
         {
             container = new StandardKernel();
+            container.Bind<ConnectionConfiguration>().ToSelf().InSingletonScope();
             container.Bind<IDataFetcher>().To<DataFetcher>();
             container.Bind<IPictureFetcher>().To<PictureFetcher>();
             container.Bind<ITelemetryParser>().To<TelemetryParser>();
+            container.Bind<ITelecommandSender>().To<TelecommandSender>();
+            container.Bind<TelecommandData>().ToSelf();
             container.Bind<TelemetryInformationContainer>().ToSelf();
         }
 
@@ -34,10 +37,11 @@ namespace sampleserver
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                var telecommandData = container.Get<TelecommandData>();
                 var telemetryInformationContainer = container.Get<TelemetryInformationContainer>();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(telemetryInformationContainer),
+                    DataContext = new MainWindowViewModel(telecommandData, telemetryInformationContainer),
                 };
             }
 
