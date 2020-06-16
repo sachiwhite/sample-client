@@ -6,8 +6,8 @@ namespace sampleserver.Infrastructure
 {
     public interface ITelemetryParser
     {
-        Task UpdateData();
-        DateTime? GetTimestamp();
+        Task<bool> UpdateData();
+        Task<DateTime?> GetTimestamp();
         Dictionary<string, double> FetchNumericData();
        
     }

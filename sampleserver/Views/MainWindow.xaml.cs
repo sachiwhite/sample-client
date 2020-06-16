@@ -21,7 +21,7 @@ namespace sampleserver.Views
             
         }
     
-        public void ChangePic(int number)
+        public async void ChangePic(int number)
         {
             var filename = FileName + (Parameters)(number) + ".png";
             try
@@ -31,14 +31,14 @@ namespace sampleserver.Views
             }
             catch (System.Exception ex)
             {
-                #warning todo logging errors
-                System.Console.WriteLine(ex.Message);
-                throw;
+                string EventMessage= "An unknown error while updating photo. ";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
            
         }
 
-        public void UpdatePicture(string filename)
+        public async void UpdatePicture(string filename)
         {
             try
             {
@@ -47,8 +47,9 @@ namespace sampleserver.Views
             }
             catch (System.Exception ex)
             {
-                #warning todo logging errors
-                Debug.WriteLine(ex.Message);
+                string EventMessage= "An unknown error while updating photo. ";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
            
             

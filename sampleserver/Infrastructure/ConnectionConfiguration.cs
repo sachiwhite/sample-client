@@ -9,7 +9,7 @@ namespace sampleserver.Infrastructure
         public string RequestUri;
         public ConnectionConfiguration()
         {
-            RequestUri = "192.168.1.100:80";
+            RequestUri = "192.168.1.206:80";
         }
         public void ChangeRequestUri(string Uri)
         {

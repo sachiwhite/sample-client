@@ -9,8 +9,8 @@ namespace sampleserver.Models
     
    public class TelemetryInformationContainer
     {
-        private IPictureFetcher pictureFetcher;
-        private PlotCreator creator;
+        private readonly IPictureFetcher pictureFetcher;
+        private readonly PlotCreator creator;
         public ITelemetryParser DataParser { get; }
         public List<DateTime> LastTimestamps { get; private set; }
         private Dictionary<string, IDataItem> Measures;
@@ -30,9 +30,9 @@ namespace sampleserver.Models
             if (LastTimestamps.Count>countOfRecordsToStore)
                 FlushOldRecords();
             
-            await DataParser.UpdateData();
+            bool updateResult = await DataParser.UpdateData();
             
-            var timestampToAdd = DataParser.GetTimestamp();
+            var timestampToAdd = await DataParser.GetTimestamp();
             var dataToProcess = DataParser.FetchNumericData();
             if (timestampToAdd!=null || dataToProcess.Count!=0)
             {
@@ -52,14 +52,18 @@ namespace sampleserver.Models
                         Measures.Add(key, measureToAdd);
                     }
                 }
-                CreatePlots();
+
+                if (updateResult)
+                    CreatePlots();    
+
+                
             }
             
         }
-        public string FetchPicture()
+        public async Task<string> FetchPicture()
         {
-            pictureFetcher.FetchPicture();
-            return pictureFetcher.LastPictureFetchedPath;
+            var downloadResult = await pictureFetcher.FetchPicture();
+            return downloadResult ? pictureFetcher.LastPictureFetchedPath : string.Empty;
         }
         private void FlushOldRecords()
         {
@@ -75,7 +79,7 @@ namespace sampleserver.Models
         {
             foreach (var measure in Measures)
             {
-                creator.ReturnPlot(LastTimestamps[0], measure.Value.LastMeasures, measure.Key);
+                creator.ReturnPlot(LastTimestamps, measure.Value.LastMeasures, measure.Key);
             }
         }
     }

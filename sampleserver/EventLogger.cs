@@ -12,13 +12,14 @@ namespace sampleserver
         public static string ErrorLog;
         static EventLogger()
         {
-           
+            OnLoading();
         }
         public static async Task OnLoading()
         {
             DateTime startupTime = DateTime.Now;
             EventLogFilePath=$"eventLog{startupTime.Year}{startupTime.Month}{startupTime.Day}{startupTime.Hour}{startupTime.Minute}.txt";
-            string startingLine = $"SAMPLE client started at: {startupTime}";
+            string startingLine = $"SAMPLE client started at: {startupTime} \n";
+            
             using (StreamWriter writer = new StreamWriter(EventLogFilePath,true))
             {
                 
@@ -44,6 +45,7 @@ namespace sampleserver
         }
         public static async Task LogForUser(string eventMessage)
         {
+            
             await LogEventToFile(eventMessage);
             ErrorLog+=$"{DateTime.Now}: {eventMessage} \n";
 

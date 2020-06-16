@@ -20,8 +20,10 @@ namespace sampleserver.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private TelemetryInformationContainer telemetryInformationContainer;
-        private TelecommandData telecommandData;
+        private const int Miliseconds = 1000;
+        private readonly int delay = 1*Miliseconds;
+        private readonly TelemetryInformationContainer telemetryInformationContainer;
+        private readonly TelecommandData telecommandData;
         public string EventLog
         {
             get => EventLogger.ErrorLog;
@@ -35,7 +37,8 @@ namespace sampleserver.ViewModels
                 await Task.Run(async () =>
                 {
                     await telemetryInformationContainer.UpdateItems();
-                    await Task.Delay(1000);
+                    
+                    await Task.Delay(millisecondsDelay: delay);
                 });
                 if (window != null)
                 {
@@ -65,11 +68,13 @@ namespace sampleserver.ViewModels
 
         private async Task DownloadPicture(IChangeImages window)
         {
-            var downloadedImageFilePath = telemetryInformationContainer.FetchPicture();
-            if (window != null)
+            var downloadedImageFilePath = await telemetryInformationContainer.FetchPicture();
+            if (downloadedImageFilePath!=string.Empty)
             {
-                window.UpdatePicture(downloadedImageFilePath);
+                window?.UpdatePicture(downloadedImageFilePath); 
             }
+            this.RaisePropertyChanged("EventLog");
+            
 
         }
 

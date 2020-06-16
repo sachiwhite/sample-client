@@ -4,92 +4,111 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:imaging="clr-namespace:Avalonia.Media.Imaging;assembly=Avalonia.Visuals"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
         x:Class="sampleserver.Views.MainWindow"
         Icon="/Assets/sample.ico"
                 Name="sampleWindow"
               Title="SAMPLE server client"
-              WindowState="Maximized">
+              WindowState="Maximized"
+        Background="#f4f4f4"
+        >
    <Design.DataContext>
     <vm:MainWindowViewModel></vm:MainWindowViewModel>
   </Design.DataContext>
-          
-  <Grid>
+     <Grid ShowGridLines="False">
     <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="550"></ColumnDefinition>
+      <ColumnDefinition Width="550"></ColumnDefinition>
       <ColumnDefinition Width="*"></ColumnDefinition>
-      <ColumnDefinition Width="*"></ColumnDefinition>
-      <ColumnDefinition Width="1.3*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
+      <RowDefinition Height="50"></RowDefinition>
       <RowDefinition></RowDefinition>
-      <RowDefinition Height="100"></RowDefinition>
+      <RowDefinition Height="60"></RowDefinition>
     </Grid.RowDefinitions>
-    
-    <ScrollViewer Grid.Column="0" Grid.Row="0">
-    <StackPanel Margin="3" Grid.Column="0" Grid.Row="0">
-      <Image Name="humidity" Source="/Assets/plot.png" >  </Image>
-      <TextBlock FontStyle="" HorizontalAlignment="Center"> humidity </TextBlock>
-      <Image Name="pressure" Source="/Assets/plot.png" > </Image>
-      <TextBlock HorizontalAlignment="Center" > pressure </TextBlock>
-      <Image Name="light_intensity" Source="/Assets/plot.png"   > </Image>
-      <TextBlock HorizontalAlignment="Center"> light intensity </TextBlock>
-      <Image Name="no_of_lamps" Source="/Assets/plot.png"   > </Image>
-      <TextBlock FontStyle="Oblique" HorizontalAlignment="Center"> no of lamps </TextBlock>
-    </StackPanel>
+    <Grid Grid.Row="0" Grid.Column="1">
+      <TextBlock HorizontalAlignment="Center" Margin="1" Foreground="Black" FontSize="30" FontWeight="UltraBold" Text="CONTROL ROOM CONSOLE"></TextBlock>
+    </Grid>
+    <ScrollViewer  Grid.Column="0" Grid.Row="1">
+      <StackPanel Margin="3" Grid.Column="0" Grid.Row="1">
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> HUMIDITY </TextBlock>
+        <Image Name="humidity" Source="/Assets/plot.png" >  </Image>
+       <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > PRESSURE </TextBlock>
+        <Image Name="pressure" Source="/Assets/plot.png" > </Image>
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> LIGHT INTENSITY </TextBlock>
+        <Image Name="light_intensity" Source="/Assets/plot.png"   > </Image>
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF LAMPS </TextBlock>
+        <Image Name="no_of_lamps" Source="/Assets/plot.png"   > </Image>
+        
+      </StackPanel>
     </ScrollViewer>
-    
-    <ScrollViewer Grid.Column="1" Grid.Row="0">
-      <StackPanel Margin="3" Grid.Column="1" Grid.Row="0" Spacing="1">
-      <TextBlock Text="Control room console" HorizontalAlignment="Center"> </TextBlock>
-      <TextBlock Text="SAMPLE" FontSize="16" HorizontalAlignment="Center" ></TextBlock>
-      <Image Name="temperature" Source="/Assets/plot.png"  > </Image>
-      <TextBlock HorizontalAlignment="Center"> temperature </TextBlock>
-      <Image Name="no_of_airfans" Source="/Assets/plot.png"  > </Image>
-      <TextBlock HorizontalAlignment="Center" > no of airfans </TextBlock>
-      <Image Name="no_of_heaters" Source="/Assets/plot.png"   > </Image>
-      <TextBlock HorizontalAlignment="Center"> no of heaters </TextBlock>
-    </StackPanel>
-      
-    </ScrollViewer>
-    
-    <ScrollViewer Grid.Column="2" Grid.Row="0">
-      
-    <StackPanel Margin="3" Grid.Column="2" Grid.Row="0">
-      <Image Name="downloaded_photo" HorizontalAlignment="Center" Margin="10,10,10,10" Source="/Assets/downloaded_photo.png"></Image>
-      <TextBlock HorizontalAlignment="Center" > Last downloaded photo</TextBlock>
-      <Button
-        Command="{Binding ChangePictureCommand}"     
-        CommandParameter="{Binding ElementName=sampleWindow}"
-        Padding="2"
-        Content="start updating plots" Width="150" HorizontalAlignment="Center">
-      </Button>
-       <Button
-        Command="{Binding DownloadPictureCommand}"     
-        CommandParameter="{Binding ElementName=sampleWindow}"
-        Padding="2"
-        Content="download newest picture from website" HorizontalAlignment="Center">
-      </Button>
-        <TextBlock Background="White"
-            Text="{Binding EventLog}">
-          
-        </TextBlock>
 
-    </StackPanel>
+    <ScrollViewer Margin="-250,0,0,0" Grid.Column="1" Grid.Row="1">
+      <StackPanel>
+        <Image HorizontalAlignment="Center" Height="190" Margin="1" Source="/Assets/sample-big.png"></Image>
+        <TextBlock Margin="1,20,1,1" FontWeight="ExtraLight" HorizontalAlignment="Center"> TEMPERATURE </TextBlock>
+        <Image Name="temperature" Source="/Assets/plot.png"  > </Image>
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > NUMBER OF AIRFANS </TextBlock>
+        <Image Name="no_of_airfans" Source="/Assets/plot.png"  > </Image>
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF HEATERS </TextBlock>
+        <Image Name="no_of_heaters" Source="/Assets/plot.png"   > </Image>
+      </StackPanel>
+
     </ScrollViewer>
-    <StackPanel Margin="3"  Grid.Row="1" Grid.ColumnSpan="3" >
-      <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top">Enter command here</TextBlock>
-      <TextBox x:Name="telemetryCommandTextBox" Height="30" HorizontalAlignment="Stretch"> </TextBox>
-     
-      <Button VerticalAlignment="Bottom" 
-              HorizontalAlignment="Right" 
-              Command="{Binding SendTelemetryCommand}" 
-              CommandParameter="{Binding Text, ElementName=telemetryCommandTextBox}"> Send</Button>
+
+    <ScrollViewer Grid.Column="2" Grid.Row="1">
+
+      <StackPanel Margin="3" Grid.Column="2" Grid.Row="1">
+        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > LAST DOWNLOADED PHOTO</TextBlock>
+        <Image Name="downloaded_photo" HorizontalAlignment="Center" Margin="10,2,10,10" Source="/Assets/downloaded_photo.png"></Image>
+        <Button
+          Command="{Binding ChangePictureCommand}"
+          Margin="10,2"
+          CommandParameter="{Binding ElementName=sampleWindow}"
+          Padding="2"
+          Content="Start updating plots!" Width="150" HorizontalAlignment="Center">
+        </Button>
+        <Button
+         Command="{Binding DownloadPictureCommand}"
+         CommandParameter="{Binding ElementName=sampleWindow}"
+         Margin="5"
+         Padding="10,2"
+         Content="Download most recent picture" HorizontalAlignment="Center">
+        </Button>
+        <TextBlock FontWeight="ExtraLight" VerticalAlignment="Top" Margin="10,10,10,10" Text="EVENT LOG:"> </TextBlock>
+
+        <Grid VerticalAlignment="Stretch">
+          <ScrollViewer>
+          <TextBlock MinHeight="315" Margin="10" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White"
+              Text="{Binding EventLog}">
+          </TextBlock>
+            </ScrollViewer>
+        </Grid>
+      </StackPanel>
+
+
+
+    </ScrollViewer>
+    <StackPanel Margin="3"  Grid.Row="2" Grid.ColumnSpan="3" >
+      <TextBlock FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Top">Enter command below</TextBlock>
+      <Grid  Grid.Row="2" Grid.ColumnSpan="3">
+
+        <TextBox x:Name="telemetryCommandTextBox" HorizontalAlignment="Stretch" Height="30"> </TextBox>
+
+        <Button
+                Margin="1,0"
+                Padding="5,2"
+                Height="30"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Command="{Binding SendTelemetryCommand}"
+                CommandParameter="{Binding Text, ElementName=telemetryCommandTextBox}"> Send</Button>
+      </Grid>
     </StackPanel>
-      
-    
+
+
 
 
 
   </Grid>
-
 </Window>

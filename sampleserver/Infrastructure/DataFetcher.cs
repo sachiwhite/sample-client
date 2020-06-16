@@ -24,21 +24,32 @@ namespace sampleserver.Infrastructure
                 {
                     var Uri = new UriBuilder(RequestUri).Uri;
                     json = await httpClient.GetStringAsync(Uri);
+                    
+                    await EventLogger.LogForUser("Connection established.");
                 }
-                catch(ArgumentNullException anex)
+                catch (ArgumentNullException ex)
                 {
-                    Debug.WriteLine(anex.Message);
-                    Debug.WriteLine(anex.StackTrace);
+                    string EventMessage= "The request Uri was null. ";
+                    await EventLogger.LogForUser(EventMessage);
+                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+
+                }
+                catch (HttpRequestException ex)
+                {
+                    string EventMessage= "The HTTP request failed. ";
+                    await EventLogger.LogForUser(EventMessage);
+                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.Message);
-                    Debug.WriteLine(ex.StackTrace);
+                    string EventMessage= "An unknown error occurred in DataFetcher while fetching data. ";
+                    await EventLogger.LogForUser(EventMessage);
+                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
 
                 }
                 
             }
-            await EventLogger.LogForUser("Connection established.");
+           
             return json;
         }
     }

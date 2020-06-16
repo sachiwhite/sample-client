@@ -12,7 +12,7 @@ namespace sampleserver.Infrastructure
     {
         private readonly IDataFetcher dataFetcher;
         private TelemetryStorage telemetry;
-        private JsonSerializerOptions jsonSerializerOptions;
+        private readonly JsonSerializerOptions jsonSerializerOptions;
         public TelemetryParser(IDataFetcher dataFetcher)
         {
             this.dataFetcher = dataFetcher;
@@ -22,7 +22,7 @@ namespace sampleserver.Infrastructure
                 PropertyNameCaseInsensitive=true,
             };
         }
-        public async Task UpdateData()
+        public async Task<bool> UpdateData()
         {
             var json = await dataFetcher.UpdateData();
             try
@@ -34,22 +34,26 @@ namespace sampleserver.Infrastructure
                 string EventMessage = "An error occurred in TelemetryParser while updating data. An object to populate with values from JSON file was null.";
                 await EventLogger.LogForUser(EventMessage);
                 await EventLogger.LogExceptionToFile(EventMessage,ex.Message,ex.StackTrace);
+                return false;
             }
             catch (JsonException ex)
             {
                 string EventMessage= "An error occurred in TelemetryParser while updating data. Downloaded JSON file is invalid.";
                 await EventLogger.LogForUser(EventMessage);
                 await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                return false;
             }
             catch (Exception ex)
             {
                 string EventMessage= "An unknown error occurred in TelemetryParser while updating data. ";
                 await EventLogger.LogForUser(EventMessage);
                 await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                return false;
             }
 
+            return true;
         }
-        public DateTime? GetTimestamp()
+        public async Task<DateTime?> GetTimestamp()
         {
             try
             {
@@ -59,21 +63,21 @@ namespace sampleserver.Infrastructure
             }
             catch(ArgumentNullException ex)
             {
-#warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage= "Timestamp was null. ";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
             catch(FormatException ex)
             {
-#warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage= "Timestamp was in improper format";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
             catch(Exception ex)
             {
-#warning todo logging errors
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
+                string EventMessage= "An unknown error occurred in TelemetryParser while updating data. ";
+                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
             }
             return null;
         }

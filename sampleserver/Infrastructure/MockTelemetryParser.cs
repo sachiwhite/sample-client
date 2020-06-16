@@ -41,7 +41,7 @@ namespace sampleserver.Infrastructure
             };
         }
 
-        public DateTime? GetTimestamp()
+        public async Task<DateTime?> GetTimestamp()
         {
             return new DateTime(2020, 3, 21, 13, 57, 31);
         }
@@ -51,8 +51,9 @@ namespace sampleserver.Infrastructure
             return " TBD ";
         }
 
-        public async Task UpdateData()
+        public async Task<bool> UpdateData()
         {
+            return true;
         }
     }
 }
