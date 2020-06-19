@@ -60,7 +60,12 @@
 
       <StackPanel Margin="3" Grid.Column="2" Grid.Row="1">
         <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > LAST DOWNLOADED PHOTO</TextBlock>
-        <Image Name="downloaded_photo" HorizontalAlignment="Center" Margin="10,2,10,10" Source="/Assets/downloaded_photo.png"></Image>
+        <Image
+          
+        Name="downloaded_photo"
+        HorizontalAlignment="Center" 
+        Margin="10,2,10,10" 
+        Source="/Assets/downloaded_photo.png"></Image>
         <Button
           Command="{Binding ChangePictureCommand}"
           Margin="10,2"

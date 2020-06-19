@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -9,7 +10,7 @@ namespace sampleserver.Views
 {
     public class MainWindow : Window, IChangeImages
     {
-        private const string FileName = @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\";
+        private const string FileName = @"..\Assets\";
         private Image[] images;
         private Image downloadedPicture;
         public MainWindow()
@@ -68,6 +69,8 @@ namespace sampleserver.Views
             images[5] = this.FindControl<Image>("no_of_airfans");
             images[6] = this.FindControl<Image>("no_of_heaters");
             downloadedPicture = this.FindControl<Image>("downloaded_photo");
+            
+            
         }
     }
 }

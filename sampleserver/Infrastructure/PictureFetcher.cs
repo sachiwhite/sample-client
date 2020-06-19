@@ -13,7 +13,7 @@ namespace sampleserver.Infrastructure
 {
     public class PictureFetcher : IPictureFetcher
     {
-        private string FileName = @"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\downloaded_photos\";
+        private string FileName = @"..\Assets\downloaded_photos\";
 
         public string LastPictureFetchedPath{get =>$"{FileName}{fileNameCore}{fileNumber}{extension}"; }
         private const string fileNameCore= "downloaded_photo";

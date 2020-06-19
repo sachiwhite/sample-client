@@ -48,7 +48,7 @@ namespace sampleserver.Models
                     }
                     else
                     {
-                        var measureToAdd = new IDataItem(value);
+                        var measureToAdd = IDataItem.ReturnDataItem(key, firstValue: value);
                         Measures.Add(key, measureToAdd);
                     }
                 }
@@ -79,7 +79,7 @@ namespace sampleserver.Models
         {
             foreach (var measure in Measures)
             {
-                creator.ReturnPlot(LastTimestamps, measure.Value.LastMeasures, measure.Key);
+                creator.ReturnPlot(LastTimestamps, measure.Value.LastMeasures, measure.Key, measure.Value.MinimumValueForPlotting, measure.Value.MaximumValueForPlotting);
             }
         }
     }

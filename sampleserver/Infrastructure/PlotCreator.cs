@@ -17,7 +17,7 @@ namespace sampleserver.Infrastructure
         {
             delay = 1;
         }
-        public void ReturnPlot(List<DateTime> timestampOfMeasures, List<double> lastMeasures, string name)
+        public void ReturnPlot(List<DateTime> timestampOfMeasures, List<double> lastMeasures, string name, double minimumValueToBeShownOnPlot, double maximumValueToBeShownOnPlot)
         {
             var plot = new Plot(400, 200);
             int pointCount = 20;
@@ -28,7 +28,6 @@ namespace sampleserver.Infrastructure
             for (int i = pointCount - lastMeasures.Count; i >= 0; i--)
             {
                 ys.Add(0);
-                Debug.WriteLine(-i - 1);
                 dates.Add(start.AddSeconds(-i * delay - 1).ToOADate());
             }
 
@@ -45,6 +44,7 @@ namespace sampleserver.Infrastructure
             plot.PlotScatter(dates.ToArray(), ys.ToArray());
             plot.Ticks(dateTimeX: true);
             plot.YLabel(name);
+            plot.Axis(y1: minimumValueToBeShownOnPlot, y2: maximumValueToBeShownOnPlot);
             plot.SaveFig(@$"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\{name}.png");
 
         }

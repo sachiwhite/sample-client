@@ -25,7 +25,7 @@ namespace sampleserver
         {
             container = new StandardKernel();
             container.Bind<ConnectionConfiguration>().ToSelf().InSingletonScope();
-            #warning using mock!!!
+            
             container.Bind<IDataFetcher>().To<DataFetcher>();
             container.Bind<IPictureFetcher>().To<PictureFetcher>();
             container.Bind<ITelemetryParser>().To<TelemetryParser>();
@@ -45,7 +45,7 @@ namespace sampleserver
                     DataContext = new MainWindowViewModel(telecommandData, telemetryInformationContainer),
                 };
             }
-            //await EventLogger.OnLoading();
+            
             base.OnFrameworkInitializationCompleted();
         }
     }
