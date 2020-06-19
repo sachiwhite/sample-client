@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.IO;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Ninject;
@@ -18,9 +19,18 @@ namespace sampleserver
         {
             AvaloniaXamlLoader.Load(this);
             ConfigureContainer();
+            ConfigureDirectories();
        
         }
 
+        private void ConfigureDirectories()
+        {
+            if (!Directory.Exists("..\\Assets"))
+                Directory.CreateDirectory("..\\Assets");
+         
+            if (!Directory.Exists("..\\Assets\\downloaded_photos"))
+                Directory.CreateDirectory("..\\Assets\\downloaded_photos");
+        }
         private void ConfigureContainer()
         {
             container = new StandardKernel();
