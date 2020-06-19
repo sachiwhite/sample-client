@@ -45,7 +45,7 @@ namespace sampleserver.Infrastructure
             plot.Ticks(dateTimeX: true);
             plot.YLabel(name);
             plot.Axis(y1: minimumValueToBeShownOnPlot, y2: maximumValueToBeShownOnPlot);
-            plot.SaveFig(@$"C:\Users\lewon\source\repos\sample-client\sampleserver\Assets\{name}.png");
+            plot.SaveFig(@$"..\Assets\{name}.png");
 
         }
 
