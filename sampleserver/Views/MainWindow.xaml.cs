@@ -33,8 +33,8 @@ namespace sampleserver.Views
             catch (System.Exception ex)
             {
                 string EventMessage= "An unknown error while updating photo. ";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
             }
            
         }
@@ -49,8 +49,8 @@ namespace sampleserver.Views
             catch (System.Exception ex)
             {
                 string EventMessage= "An unknown error while updating photo. ";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
             }
            
             

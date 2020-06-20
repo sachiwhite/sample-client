@@ -32,22 +32,22 @@ namespace sampleserver.Infrastructure
             catch (ArgumentNullException ex)
             {
                 string EventMessage = "An error occurred in TelemetryParser while updating data. An object to populate with values from JSON file was null.";
-                await EventLogger.LogForUser(EventMessage);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
                 await EventLogger.LogExceptionToFile(EventMessage,ex.Message,ex.StackTrace);
                 return false;
             }
             catch (JsonException ex)
             {
                 string EventMessage= "An error occurred in TelemetryParser while updating data. Downloaded JSON file is invalid.";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
                 return false;
             }
             catch (Exception ex)
             {
                 string EventMessage= "An unknown error occurred in TelemetryParser while updating data. ";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
                 return false;
             }
 
@@ -64,20 +64,20 @@ namespace sampleserver.Infrastructure
             catch(ArgumentNullException ex)
             {
                 string EventMessage= "Timestamp was null. ";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
             }
             catch(FormatException ex)
             {
                 string EventMessage= "Timestamp was in improper format";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
             }
             catch(Exception ex)
             {
                 string EventMessage= "An unknown error occurred in TelemetryParser while updating data. ";
-                await EventLogger.LogForUser(EventMessage);
-                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
             }
             return null;
         }

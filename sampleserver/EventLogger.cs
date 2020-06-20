@@ -27,6 +27,13 @@ namespace sampleserver
             }
             ErrorLog+=startingLine;
         }
+
+        public static async Task LogExceptionForUserAndToFile(string eventMessage, Exception ex)
+        {
+            await LogForUser(eventMessage);
+            await LogExceptionToFile(eventMessage, ex.Message, ex.StackTrace);
+        }
+
         public static async Task LogExceptionToFile(string eventMessage,string exMessage, string stackTrace)
         {
             using (StreamWriter writer = new StreamWriter(EventLogFilePath, true))

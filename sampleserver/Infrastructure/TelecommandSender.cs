@@ -28,36 +28,60 @@ namespace sampleserver.Infrastructure
             {
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-                    string json = "{\"telecommand\":"+"\""+command+"\"}";
+                    string json = "{\"telecommand\":" + "\"" + command + "\"}";
 
                     await streamWriter.WriteAsync(json);
                 }
             }
-            catch (WebException webEx)
+            catch (ProtocolViolationException ex)
             {
-                Debug.WriteLine(webEx.Message);
-                Debug.WriteLine(webEx.Response);
-               
+                string EventMessage= "Wrong method was used to obtain the resource.";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
             }
+            catch (WebException ex)
+            {
+                string EventMessage= "An error occurred while processing the request or timeout.";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
+
+            }
+            catch (Exception ex)
+            {
+                string EventMessage= "Another error while processing the request occurred. ";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
+            }
+
             try
             {
                 var webResponse = await httpWebRequest.GetResponseAsync();
-                 var httpResponse = (HttpWebResponse)webResponse;
+                var httpResponse = (HttpWebResponse) webResponse;
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = await streamReader.ReadToEndAsync();
-                    Debug.WriteLine(result);
+                    await EventLogger.LogForUser(result);
                 }
             }
-            catch (WebException webEx)
+            catch (ProtocolViolationException ex)
             {
-                Debug.WriteLine(webEx.Message);
-                Debug.WriteLine(webEx.Response);
+                string EventMessage = "No response stream. ";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
 
-            }        
+            }
+            catch (ObjectDisposedException ex)
+            {
+                string EventMessage = "Reading response was performed on disposed object.";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                 
+            }
+            catch (Exception ex)
+            {
+                string EventMessage = "An another exception while reading response occurred";
+                await EventLogger.LogExceptionForUserAndToFile(EventMessage, ex);
+            }
 
             
         }
-       
     }
 }

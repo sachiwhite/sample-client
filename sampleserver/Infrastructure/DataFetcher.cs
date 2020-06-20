@@ -7,7 +7,7 @@ namespace sampleserver.Infrastructure
 {
     public class DataFetcher : IDataFetcher
     {
-        private string RequestUri = "192.168.1.100:80/get_telemetry";
+        private readonly string RequestUri;
         private ConnectionConfiguration configuration;
 
         public DataFetcher(ConnectionConfiguration configuration)
@@ -30,21 +30,20 @@ namespace sampleserver.Infrastructure
                 catch (ArgumentNullException ex)
                 {
                     string EventMessage= "The request Uri was null. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
 
                 }
                 catch (HttpRequestException ex)
                 {
                     string EventMessage= "The HTTP request failed. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                     
                 }
                 catch (Exception ex)
                 {
                     string EventMessage= "An unknown error occurred in DataFetcher while fetching data. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                     
 
                 }
                 

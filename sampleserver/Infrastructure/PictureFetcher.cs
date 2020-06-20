@@ -49,21 +49,21 @@ namespace sampleserver.Infrastructure
                 catch (ArgumentNullException ex)
                 {
                     string EventMessage = "An Uri was null. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                     
                 }
                 catch (HttpRequestException ex)
                 {
                     string EventMessage = "A request to download the picture failed. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                     
                     
                 }
                 catch (Exception ex)
                 {
                     string EventMessage = "An unknown exception occurred during downloading picture. ";
-                    await EventLogger.LogForUser(EventMessage);
-                    await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                    await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                     
                     
                 }
                 
@@ -89,23 +89,23 @@ namespace sampleserver.Infrastructure
                             catch (ArgumentNullException ex)
                             {
                                 string EventMessage = "An filename or encoder used in PictureFetcher was null. ";
-                                await EventLogger.LogForUser(EventMessage);
-                                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                                 
                                 return false;
                             }
                             catch (ExternalException ex)
                             {
                                 string EventMessage = "There was an attempt to save picture with wrong image format. ";
-                                await EventLogger.LogForUser(EventMessage);
-                                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                                 
                                 return false;
                             }
                             catch (Exception ex)
                             {
                                 string EventMessage =
                                     "An unknown error occurred in PictureFetcher while saving photo. ";
-                                await EventLogger.LogForUser(EventMessage);
-                                await EventLogger.LogExceptionToFile(EventMessage, ex.Message, ex.StackTrace);
+                                await EventLogger.LogExceptionForUserAndToFile(EventMessage,ex);
+                                 
                                 return false;
                             }
 
