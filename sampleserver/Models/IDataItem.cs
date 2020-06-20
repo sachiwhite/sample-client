@@ -29,7 +29,7 @@ namespace sampleserver.Models
                 case Parameters.Pressure: 
                     return new IDataItem(firstValue, 950, 1050); 
                 case Parameters.Temperature: 
-                    return new IDataItem(firstValue, 15, 35);
+                    return new IDataItem(firstValue, 15, 50);
                 default: return new IDataItem(firstValue, -1, -1);
 
             }
