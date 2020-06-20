@@ -31,33 +31,33 @@ namespace sampleserver.Models
                 FlushOldRecords();
             
             bool updateResult = await DataParser.UpdateData();
-            
-            var timestampToAdd = await DataParser.GetTimestamp();
-            var dataToProcess = DataParser.FetchNumericData();
-            if (timestampToAdd!=null || dataToProcess.Count!=0)
+
+            if (updateResult)
             {
-                
-                LastTimestamps.Add((DateTime)timestampToAdd);
-                foreach (var item in dataToProcess)
+                var timestampToAdd = await DataParser.GetTimestamp();
+                var dataToProcess = DataParser.FetchNumericData();
+                if (timestampToAdd!=null || dataToProcess.Count!=0)
                 {
-                    var key = item.Key;
-                    var value = item.Value;
-                    if (Measures.ContainsKey(key))
+                    LastTimestamps.Add((DateTime)timestampToAdd);
+                    foreach (var item in dataToProcess)
                     {
-                        Measures[key].LastMeasures.Add(value);
+                        var key = item.Key;
+                        var value = item.Value;
+                        if (Measures.ContainsKey(key))
+                        {
+                            Measures[key].LastMeasures.Add(value);
+                        }
+                        else
+                        {
+                            var measureToAdd = IDataItem.ReturnDataItem(key, firstValue: value);
+                            Measures.Add(key, measureToAdd);
+                        }
                     }
-                    else
-                    {
-                        var measureToAdd = IDataItem.ReturnDataItem(key, firstValue: value);
-                        Measures.Add(key, measureToAdd);
-                    }
-                }
 
-                if (updateResult)
                     CreatePlots();    
-
-                
+                }
             }
+            
             
         }
         public async Task<string> FetchPicture()
