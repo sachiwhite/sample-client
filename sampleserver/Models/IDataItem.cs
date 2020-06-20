@@ -19,13 +19,13 @@ namespace sampleserver.Models
                 case Parameters.Humidity:
                         return new IDataItem(firstValue, 0, 100);
                 case Parameters.Light_intensity: 
-                        return new IDataItem(firstValue, 0, 100);
+                        return new IDataItem(firstValue, -0.5, 100);
                 case Parameters.No_of_airfans: 
-                        return new IDataItem(firstValue, 0, 5);
+                        return new IDataItem(firstValue, -0.5, 5);
                 case Parameters.No_of_heaters: 
-                    return new IDataItem(firstValue, 0, 5); 
+                    return new IDataItem(firstValue, -0.5, 5); 
                 case Parameters.No_of_lamps: 
-                    return new IDataItem(firstValue, 0, 5);
+                    return new IDataItem(firstValue, -0.5, 5);
                 case Parameters.Pressure: 
                     return new IDataItem(firstValue, 950, 1050); 
                 case Parameters.Temperature: 
