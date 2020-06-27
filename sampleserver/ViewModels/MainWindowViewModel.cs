@@ -15,15 +15,16 @@ using Splat;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using sampleserver.Infrastructure;
 
 namespace sampleserver.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const int Miliseconds = 1000;
-        private readonly int delay = 1*Miliseconds;
         private readonly TelemetryInformationContainer telemetryInformationContainer;
         private readonly TelecommandData telecommandData;
+        private readonly DelayProvider delayProvider;
+
         public string EventLog
         {
             get => EventLogger.ErrorLog;
@@ -38,7 +39,7 @@ namespace sampleserver.ViewModels
                 {
                     await telemetryInformationContainer.UpdateItems();
                     
-                    await Task.Delay(millisecondsDelay: delay);
+                    await Task.Delay(millisecondsDelay: (int)delayProvider.DelayInMiliseconds);
                 });
                 if (window != null)
                 {
@@ -55,14 +56,29 @@ namespace sampleserver.ViewModels
         {
 
         }
-        public MainWindowViewModel(TelecommandData telecommandData, TelemetryInformationContainer telemetryInformationContainer = null)
+        public MainWindowViewModel(DelayProvider delayProvider, TelecommandData telecommandData, TelemetryInformationContainer telemetryInformationContainer = null)
         {
-
+            this.delayProvider = delayProvider;
             this.telecommandData = telecommandData;
             this.telemetryInformationContainer = telemetryInformationContainer;
             ChangePictureCommand = ReactiveCommand.CreateFromTask<IChangeImages>(ChangeImage);
             SendTelemetryCommand = ReactiveCommand.CreateFromTask<string>(SendTelemetry);
             DownloadPictureCommand = ReactiveCommand.CreateFromTask<IChangeImages>(DownloadPicture);
+            SetTimeCommand = ReactiveCommand.CreateFromTask<string>(SetDelayInMinutes);
+
+        }
+
+        private async Task SetDelayInMinutes(string delay)
+        {
+            if (double.TryParse(delay, out double minutesDelay))
+            {
+                delayProvider.ChangeDelayFromDelayInMinutes(minutesDelay);
+            }
+            else
+            {
+                await EventLogger.LogForUser("Changing time between measurements was unsuccesful.");
+                this.RaisePropertyChanged("EventLog");
+            }
 
         }
 
@@ -82,6 +98,8 @@ namespace sampleserver.ViewModels
         {
             await telecommandData.SendTelecommand(command);
         }
+
+        public ReactiveCommand<string,Unit> SetTimeCommand { get;}
         public ReactiveCommand<IChangeImages, Unit> DownloadPictureCommand { get; }
         public ReactiveCommand<IChangeImages, Unit> ChangePictureCommand { get; }
         public ReactiveCommand<string, Unit> SendTelemetryCommand { get; }

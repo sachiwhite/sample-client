@@ -11,15 +11,16 @@ namespace sampleserver.Infrastructure
 {
     public class PlotCreator
     {
-        private int delay;
+        
+        private readonly DelayProvider delayProvider;
 
-        public PlotCreator()
+        public PlotCreator(DelayProvider delayProvider)
         {
-            delay = 1;
+            this.delayProvider = delayProvider;
         }
         public void ReturnPlot(List<DateTime> timestampOfMeasures, List<double> lastMeasures, string name, double minimumValueToBeShownOnPlot, double maximumValueToBeShownOnPlot)
         {
-            var plot = new Plot(400, 200);
+            var plot = new Plot(300, 150);
             int pointCount = 20;
             List<double> dates = new List<double>();
             List<double> ys = new List<double>();
@@ -28,7 +29,7 @@ namespace sampleserver.Infrastructure
             for (int i = pointCount - lastMeasures.Count; i >= 0; i--)
             {
                 ys.Add(0);
-                dates.Add(start.AddSeconds(-i * delay - 1).ToOADate());
+                dates.Add(start.AddSeconds(-i * delayProvider.DelayInSeconds - 1).ToOADate());
             }
 
             List<double> convertedTimestamps = new List<double>();
@@ -36,9 +37,10 @@ namespace sampleserver.Infrastructure
             for (int i = 0; i < timestampOfMeasures.Count; i++)
             {
                 //if using real data
-                convertedTimestamps.Add(timestampOfMeasures[i].ToOADate());
+                //convertedTimestamps.Add(timestampOfMeasures[i].ToOADate());
+                
                 //if using mock
-                //convertedTimestamps.Add(timestampOfMeasures[i].AddSeconds(i).ToOADate());
+                convertedTimestamps.Add(timestampOfMeasures[i].AddSeconds(i).ToOADate());
             }
 
             ys.AddRange(lastMeasures);

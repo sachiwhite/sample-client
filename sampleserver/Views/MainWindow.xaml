@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:imaging="clr-namespace:Avalonia.Media.Imaging;assembly=Avalonia.Visuals"
-        mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="800"
         x:Class="sampleserver.Views.MainWindow"
         Icon="/Assets/sample.ico"
                 Name="sampleWindow"
               Title="SAMPLE server client"
-              WindowState="Maximized"
+              WindowState="Normal"
+        Width="1280"
+        Height="800"
         Background="#f4f4f4"
         >
    <Design.DataContext>
@@ -17,8 +19,8 @@
   </Design.DataContext>
      <Grid ShowGridLines="False">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="550"></ColumnDefinition>
-      <ColumnDefinition Width="550"></ColumnDefinition>
+      <ColumnDefinition Width="350"></ColumnDefinition>
+      <ColumnDefinition Width="350"></ColumnDefinition>
       <ColumnDefinition Width="*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
@@ -26,10 +28,10 @@
       <RowDefinition></RowDefinition>
       <RowDefinition Height="60"></RowDefinition>
     </Grid.RowDefinitions>
-    <Grid Grid.Row="0" Grid.Column="1">
+    <Grid Grid.Row="0" Grid.ColumnSpan="3">
       <TextBlock HorizontalAlignment="Center" Margin="1" Foreground="Black" FontSize="30" FontWeight="UltraBold" Text="CONTROL ROOM CONSOLE"></TextBlock>
     </Grid>
-    <ScrollViewer  Grid.Column="0" Grid.Row="1">
+    <Grid  Grid.Column="0" Grid.Row="1">
       <StackPanel Margin="3" Grid.Column="0" Grid.Row="1">
         <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> HUMIDITY </TextBlock>
         <Image Name="humidity" Source="/Assets/plot.png" >  </Image>
@@ -41,9 +43,9 @@
         <Image Name="no_of_lamps" Source="/Assets/plot.png"   > </Image>
         
       </StackPanel>
-    </ScrollViewer>
+    </Grid>
 
-    <ScrollViewer Margin="-250,0,0,0" Grid.Column="1" Grid.Row="1">
+    <Grid Margin="0,0,0,0" Grid.Column="1" Grid.Row="1">
       <StackPanel>
         <Image HorizontalAlignment="Center" Height="190" Margin="1" Source="/Assets/sample-big.png"></Image>
         <TextBlock Margin="1,20,1,1" FontWeight="ExtraLight" HorizontalAlignment="Center"> TEMPERATURE </TextBlock>
@@ -54,7 +56,7 @@
         <Image Name="no_of_heaters" Source="/Assets/plot.png"   > </Image>
       </StackPanel>
 
-    </ScrollViewer>
+    </Grid>
 
     <ScrollViewer Grid.Column="2" Grid.Row="1">
 
@@ -66,9 +68,17 @@
         HorizontalAlignment="Center" 
         Margin="10,2,10,10" 
         Source="/Assets/downloaded_photo.png"></Image>
+        <StackPanel Margin="3"  Orientation="Horizontal">
+          <TextBlock  Margin="10,2" Text="Time between measures (in minutes):"></TextBlock>
+          <TextBox x:Name="timeTextBox" Margin="10,2" MinWidth="100"></TextBox>
+          <Button
+            CommandParameter="{Binding Text, ElementName=timeTextBox}"
+            Command="{Binding SetTimeCommand}"
+            Margin="10,2" Width="150" Content="Save"></Button>
+        </StackPanel>
         <Button
           Command="{Binding ChangePictureCommand}"
-          Margin="10,2"
+          Margin="10,20,2,10"
           CommandParameter="{Binding ElementName=sampleWindow}"
           Padding="2"
           Content="Start updating plots!" Width="150" HorizontalAlignment="Center">

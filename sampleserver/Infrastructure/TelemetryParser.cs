@@ -10,11 +10,13 @@ namespace sampleserver.Infrastructure
 {
     public class TelemetryParser : ITelemetryParser
     {
+        private readonly IDataSaver dataSaver;
         private readonly IDataFetcher dataFetcher;
         private TelemetryStorage telemetry;
         private readonly JsonSerializerOptions jsonSerializerOptions;
-        public TelemetryParser(IDataFetcher dataFetcher)
+        public TelemetryParser(IDataFetcher dataFetcher, IDataSaver dataSaver)
         {
+            this.dataSaver = dataSaver;
             this.dataFetcher = dataFetcher;
             telemetry = new TelemetryStorage();
             jsonSerializerOptions=new JsonSerializerOptions
@@ -28,6 +30,7 @@ namespace sampleserver.Infrastructure
             try
             {
                 telemetry = JsonSerializer.Deserialize<TelemetryStorage>(json,jsonSerializerOptions);
+                await dataSaver.SaveTelemetryToFile(telemetry);
             }
             catch (ArgumentNullException ex)
             {
@@ -53,6 +56,8 @@ namespace sampleserver.Infrastructure
 
             return true;
         }
+
+        
         public async Task<DateTime?> GetTimestamp()
         {
             try

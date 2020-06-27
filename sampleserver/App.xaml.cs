@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -23,6 +24,7 @@ namespace sampleserver
        
         }
 
+        
         private void ConfigureDirectories()
         {
             if (!Directory.Exists("..\\Assets"))
@@ -35,9 +37,12 @@ namespace sampleserver
         {
             container = new StandardKernel();
             container.Bind<ConnectionConfiguration>().ToSelf().InSingletonScope();
-
-            container.Bind<IDataFetcher>().To<DataFetcher>();
-            container.Bind<IPictureFetcher>().To<PictureFetcher>();
+            container.Bind<DelayProvider>().ToSelf().InSingletonScope();
+            #warning using mock
+            container.Bind<IDataFetcher>().To<MockDataFetcher>();
+            container.Bind<IPictureFetcher>().To<MockPictureFetcher>();
+            
+            container.Bind<IDataSaver>().To<CSVDataSaver>();
             container.Bind<ITelemetryParser>().To<TelemetryParser>();
             container.Bind<ITelecommandSender>().To<TelecommandSender>();
             container.Bind<TelecommandData>().ToSelf();
@@ -49,10 +54,11 @@ namespace sampleserver
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 var telecommandData = container.Get<TelecommandData>();
+                var delayProvider = container.Get<DelayProvider>();
                 var telemetryInformationContainer = container.Get<TelemetryInformationContainer>();
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(telecommandData, telemetryInformationContainer),
+                    DataContext = new MainWindowViewModel(delayProvider, telecommandData, telemetryInformationContainer),
                 };
             }
             
