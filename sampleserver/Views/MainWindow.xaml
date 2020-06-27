@@ -63,12 +63,13 @@
       <StackPanel Margin="3" Grid.Column="2" Grid.Row="1">
         <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > LAST DOWNLOADED PHOTO</TextBlock>
         <Image
-          
+        MaxWidth="500"
+        MaxHeight="400"
         Name="downloaded_photo"
         HorizontalAlignment="Center" 
         Margin="10,2,10,10" 
         Source="/Assets/downloaded_photo.png"></Image>
-        <StackPanel Margin="3"  Orientation="Horizontal">
+        <StackPanel Margin="3" HorizontalAlignment="Center"  Orientation="Horizontal">
           <TextBlock  Margin="10,2" Text="Time between measures (in minutes):"></TextBlock>
           <TextBox x:Name="timeTextBox" Margin="10,2" MinWidth="100"></TextBox>
           <Button

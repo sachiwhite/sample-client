@@ -45,6 +45,7 @@ namespace sampleserver.Views
             {
                 Bitmap bitmap = new Bitmap(filename);
                 downloadedPicture.Source = bitmap;
+                
             }
             catch (System.Exception ex)
             {
