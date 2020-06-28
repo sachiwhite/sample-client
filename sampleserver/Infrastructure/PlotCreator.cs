@@ -37,10 +37,10 @@ namespace sampleserver.Infrastructure
             for (int i = 0; i < timestampOfMeasures.Count; i++)
             {
                 //if using real data
-                //convertedTimestamps.Add(timestampOfMeasures[i].ToOADate());
+                convertedTimestamps.Add(timestampOfMeasures[i].ToOADate());
                 
                 //if using mock
-                convertedTimestamps.Add(timestampOfMeasures[i].AddSeconds(i).ToOADate());
+                //convertedTimestamps.Add(timestampOfMeasures[i].AddSeconds(i).ToOADate());
             }
 
             ys.AddRange(lastMeasures);

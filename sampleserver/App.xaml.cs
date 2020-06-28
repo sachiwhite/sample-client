@@ -39,8 +39,8 @@ namespace sampleserver
             container.Bind<ConnectionConfiguration>().ToSelf().InSingletonScope();
             container.Bind<DelayProvider>().ToSelf().InSingletonScope();
             #warning using mock
-            container.Bind<IDataFetcher>().To<MockDataFetcher>();
-            container.Bind<IPictureFetcher>().To<MockPictureFetcher>();
+            container.Bind<IDataFetcher>().To<DataFetcher>();
+            container.Bind<IPictureFetcher>().To<PictureFetcher>();
             
             container.Bind<IDataSaver>().To<CSVDataSaver>();
             container.Bind<ITelemetryParser>().To<TelemetryParser>();

@@ -19,8 +19,7 @@
   </Design.DataContext>
      <Grid ShowGridLines="False">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="350"></ColumnDefinition>
-      <ColumnDefinition Width="350"></ColumnDefinition>
+      <ColumnDefinition Width="700"></ColumnDefinition>
       <ColumnDefinition Width="*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
@@ -28,39 +27,46 @@
       <RowDefinition></RowDefinition>
       <RowDefinition Height="60"></RowDefinition>
     </Grid.RowDefinitions>
-    <Grid Grid.Row="0" Grid.ColumnSpan="3">
+    <Grid Grid.Row="0" Grid.ColumnSpan="2">
       <TextBlock HorizontalAlignment="Center" Margin="1" Foreground="Black" FontSize="30" FontWeight="UltraBold" Text="CONTROL ROOM CONSOLE"></TextBlock>
     </Grid>
-    <Grid  Grid.Column="0" Grid.Row="1">
-      <StackPanel Margin="3" Grid.Column="0" Grid.Row="1">
-        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> HUMIDITY </TextBlock>
-        <Image Name="humidity" Source="/Assets/plot.png" >  </Image>
-       <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > PRESSURE </TextBlock>
-        <Image Name="pressure" Source="/Assets/plot.png" > </Image>
-        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> LIGHT INTENSITY </TextBlock>
-        <Image Name="light_intensity" Source="/Assets/plot.png"   > </Image>
-        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF LAMPS </TextBlock>
-        <Image Name="no_of_lamps" Source="/Assets/plot.png"   > </Image>
+       <ScrollViewer Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"></ColumnDefinition>
+                <ColumnDefinition Width="350"></ColumnDefinition>
+              </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+             
+             <StackPanel Margin="3">
+                <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> HUMIDITY </TextBlock>
+                <Image Name="humidity" Source="/Assets/plot.png" >  </Image>
+                <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > PRESSURE </TextBlock>
+                <Image Name="pressure" Source="/Assets/plot.png" > </Image>
+                <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> LIGHT INTENSITY </TextBlock>
+                <Image Name="light_intensity" Source="/Assets/plot.png"   > </Image>
+                <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF LAMPS </TextBlock>
+                <Image Name="no_of_lamps" Source="/Assets/plot.png"   > </Image>
         
-      </StackPanel>
+            </StackPanel>
+            </Grid>
+
+          <Grid Margin="0,0,0,0" Grid.Column="1" Width="350">
+            <StackPanel Margin="3">
+              <Image HorizontalAlignment="Center" Height="150" Margin="1" Source="/Assets/sample-big.png"></Image>
+              <TextBlock Margin="1,20,1,1" FontWeight="ExtraLight" HorizontalAlignment="Center"> TEMPERATURE </TextBlock>
+              <Image Name="temperature" Source="/Assets/plot.png"  > </Image>
+              <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > NUMBER OF AIRFANS </TextBlock>
+              <Image Name="no_of_airfans" Source="/Assets/plot.png"  > </Image>
+              <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF HEATERS </TextBlock>
+              <Image Name="no_of_heaters" Source="/Assets/plot.png"   > </Image>
+          </StackPanel>
+         </Grid>
     </Grid>
+  </ScrollViewer>
+    <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
 
-    <Grid Margin="0,0,0,0" Grid.Column="1" Grid.Row="1">
-      <StackPanel>
-        <Image HorizontalAlignment="Center" Height="190" Margin="1" Source="/Assets/sample-big.png"></Image>
-        <TextBlock Margin="1,20,1,1" FontWeight="ExtraLight" HorizontalAlignment="Center"> TEMPERATURE </TextBlock>
-        <Image Name="temperature" Source="/Assets/plot.png"  > </Image>
-        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > NUMBER OF AIRFANS </TextBlock>
-        <Image Name="no_of_airfans" Source="/Assets/plot.png"  > </Image>
-        <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center"> NUMBER OF HEATERS </TextBlock>
-        <Image Name="no_of_heaters" Source="/Assets/plot.png"   > </Image>
-      </StackPanel>
-
-    </Grid>
-
-    <ScrollViewer Grid.Column="2" Grid.Row="1">
-
-      <StackPanel Margin="3" Grid.Column="2" Grid.Row="1">
+      <StackPanel Margin="3">
         <TextBlock FontWeight="ExtraLight" HorizontalAlignment="Center" > LAST DOWNLOADED PHOTO</TextBlock>
         <Image
         MaxWidth="500"
