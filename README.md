@@ -9,6 +9,25 @@ For more info on the project, check out [sample-main repository](https://github.
 Starting screen of the app:
 ![Example screenshot](https://snipboard.io/akNvn7.jpg)
 
+App window with plots:          
+![SAMPLE client window with plots](https://snipboard.io/5HTz3f.jpg)
+
+## Setup
+#### If you want to use the app with [SAMPLE server module](https://github.com/Dinuirar/sample-server)
+* download the binary from [Releases](https://github.com/sachiwhite/sample-client/releases) section.
+
+#### If you want to build the app and test it without server module.
+* clone the repository
+* run command line in directory, where you cloned SAMPLE client to and run `dotnet build` command
+##### Mocking is enabled by default. If you'd like to disable it, move to `App.xaml.cs` file, and remove/comment line `#define MOCKING`, then recompile the app.
+
+## Features
+* It enables downloading telemetry from the server at specified time intervals.
+
+
+
+
+
 ## Technologies
 * C#
 * .NET Core 3.0
