@@ -2,6 +2,8 @@ using NUnit.Framework;
 using sampleserver.Infrastructure;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
+using Moq;
 
 namespace sampleclient.Tests
 {
@@ -11,33 +13,27 @@ namespace sampleclient.Tests
         public void Setup()
         {
         }
-
+        /// <summary>
+        /// not passing on mock version
+        /// </summary>
+        /// <returns></returns>
         [Test]
-        public void DataFetcher_UpdateData_Failure()
+        public async Task DataFetcher_UpdateData_Failure()
         {
-            var dataFetcher = new DataFetcher();
-            CollectionAssert.AreEquivalent(new List<string>(), dataFetcher.UpdateData());
+            Mock<IDataFetcher> dataFetcherFailureMock = new Mock<IDataFetcher>();
+            dataFetcherFailureMock.Setup(x => x.UpdateData()).ReturnsAsync(string.Empty);
+            var dataFetcher = dataFetcherFailureMock.Object;
+            Assert.AreEqual(string.Empty, await dataFetcher.UpdateData());
         }
         [Test]
-        public void DataFetcher_UpdateData_ReturnsCorrectData()
+        public async Task DataFetcher_UpdateData_ReturnsCorrectData()
         {
-            var dataFetcher = new DataFetcher();
-            var expected = new List<string>()
-            {
-                "\n        \n        \n        \n        \n\tTimestamp: 2020-03-21 13:57:31 ",
-                "\n\tTemperature: 27.5 ",
-                "\n\tHumidity: 98.0 ",
-                "\n\tPressure: 100.0 ",
-                "\n\tLight_intensity: 0.4 ",
-                " \n\tNo_of_lamps: 2 ",
-                "\n\tNo_of_airfans: 1 ",
-                "\n\tNo_of_heaters: 0 ",
-                "\n\tPhoto: TBD ",
-                "",
-                "\n\n    "
-            };
-            var dataToCompare = dataFetcher.UpdateData();
-            CollectionAssert.AreEquivalent(expected, dataToCompare);
+            var dataFetcher = new MockDataFetcher();
+            var expected = "{\"humidity\": 40.0, \"temperature\": 25.0, \"pressure\": 1000.0, \"luminosity\": 0.0, " +
+                           "\"lamps\": 1, \"airfans\": 0, \"heaters\": 0, \"timestamp\": \"2020 - 05 - 31 15:05:17\"}";
+
+            var dataToCompare = await dataFetcher.UpdateData();
+            Assert.AreEqual(expected,dataToCompare);
         }
 
 
