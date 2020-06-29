@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define MOCKING
+using System;
 using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -38,10 +39,19 @@ namespace sampleserver
             container = new StandardKernel();
             container.Bind<ConnectionConfiguration>().ToSelf().InSingletonScope();
             container.Bind<DelayProvider>().ToSelf().InSingletonScope();
-            #warning using mock
+            #if (MOCKING)
+            container.Bind<ITimestampsConverter>().To<MockTimestampsConverter>();
+            #else
+            container.Bind<ITimestampsConverter>().To<TimestampsConverter>();
+            #endif
+            container.Bind<PlotCreator>().ToSelf();
+            #if (MOCKING)
+            container.Bind<IDataFetcher>().To<MockDataFetcher>();
+            container.Bind<IPictureFetcher>().To<MockPictureFetcher>();
+            #else
             container.Bind<IDataFetcher>().To<DataFetcher>();
             container.Bind<IPictureFetcher>().To<PictureFetcher>();
-            
+            #endif
             container.Bind<IDataSaver>().To<CSVDataSaver>();
             container.Bind<ITelemetryParser>().To<TelemetryParser>();
             container.Bind<ITelecommandSender>().To<TelecommandSender>();

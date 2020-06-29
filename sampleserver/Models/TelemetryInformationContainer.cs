@@ -16,12 +16,12 @@ namespace sampleserver.Models
         private Dictionary<string, IDataItem> Measures;
         private readonly int countOfRecordsToStore;
 
-        public TelemetryInformationContainer(ITelemetryParser telemetryParser, IPictureFetcher pictureFetcher,DelayProvider delayProvider)
+        public TelemetryInformationContainer(ITelemetryParser telemetryParser, IPictureFetcher pictureFetcher, PlotCreator plotCreator)
         {
             countOfRecordsToStore = 20;
             this.pictureFetcher=pictureFetcher;
             DataParser = telemetryParser;
-            creator = new PlotCreator(delayProvider);
+            creator = plotCreator;
             Measures = new Dictionary<string, IDataItem>();
             LastTimestamps = new List<DateTime>();
         }

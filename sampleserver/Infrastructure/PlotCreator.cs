@@ -13,10 +13,12 @@ namespace sampleserver.Infrastructure
     {
         
         private readonly DelayProvider delayProvider;
+        private readonly ITimestampsConverter timestampsConverter;
 
-        public PlotCreator(DelayProvider delayProvider)
+        public PlotCreator(DelayProvider delayProvider, ITimestampsConverter timestampsConverter)
         {
             this.delayProvider = delayProvider;
+            this.timestampsConverter = timestampsConverter;
         }
         public void ReturnPlot(List<DateTime> timestampOfMeasures, List<double> lastMeasures, string name, double minimumValueToBeShownOnPlot, double maximumValueToBeShownOnPlot)
         {
@@ -33,15 +35,8 @@ namespace sampleserver.Infrastructure
             }
 
             List<double> convertedTimestamps = new List<double>();
-
-            for (int i = 0; i < timestampOfMeasures.Count; i++)
-            {
-                //if using real data
-                convertedTimestamps.Add(timestampOfMeasures[i].ToOADate());
-                
-                //if using mock
-                //convertedTimestamps.Add(timestampOfMeasures[i].AddSeconds(i).ToOADate());
-            }
+            List<double> timestampsOfMeasuresConvertedToADate = timestampsConverter.ConvertTimestamps(timestampOfMeasures);
+            convertedTimestamps.AddRange(timestampsOfMeasuresConvertedToADate);
 
             ys.AddRange(lastMeasures);
             dates.AddRange(convertedTimestamps);
